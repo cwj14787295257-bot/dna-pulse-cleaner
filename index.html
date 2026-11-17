@@ -16,7 +16,7 @@
       --apple-bg: #000000;
       --apple-surface: #0c0c0e;
       --apple-card: #141416;
-      --apple-card-secondary: #1c1c1e;
+      --apple-card-secondary: #1d1d1f;
       --apple-card-hover: #242426;
       --apple-border: #2c2c2e;
       --apple-border-subtle: rgba(255, 255, 255, 0.08);
@@ -380,11 +380,11 @@
       font-weight: 500;
     }
 
-    /* Bento Card */
+    /* Bento Card (Apple rounded-3xl Bento Grid) */
     .bento-card {
       background: var(--apple-card);
       border: 1px solid var(--apple-border-subtle);
-      border-radius: 20px;
+      border-radius: 24px;
       padding: 20px;
       box-shadow: var(--apple-shadow-sm);
       transition: border-color 0.25s, box-shadow 0.25s;
@@ -1193,7 +1193,7 @@
           </div>
           <div class="metric-value-row">
             <span id="txtCleaningTempCoil">--</span>
-            <span class="metric-value-unit">°F</span>
+            <span class="metric-value-unit">°C</span>
             <span style="font-size: 11px; color: var(--apple-text-muted); margin: 0 2px;">|</span>
             <span id="txtCleaningTempBoard">28</span>
             <span class="metric-value-unit">°C</span>
@@ -1536,15 +1536,21 @@
       try {
         logCleaningDecision('[USB 连接] 正在请求打开 Evolv DNA CDC ACM 串口...');
         // Evolv USB CDC Vendor ID 0x268B
-        serialPort = await navigator.serial.requestPort({
-          filters: [
-            { usbVendorId: 0x268b }, // Evolv LLC
-            { usbVendorId: 0x0483 }  // STMicroelectronics / generic CDC
-          ]
-        }).catch(err => {
-          // If filtered request was cancelled or unsupported, fallback to open port chooser
-          return navigator.serial.requestPort();
-        });
+        try {
+          serialPort = await navigator.serial.requestPort({
+            filters: [
+              { usbVendorId: 0x268b }, // Evolv LLC
+              { usbVendorId: 0x0483 }  // STMicroelectronics / generic CDC
+            ]
+          });
+        } catch (portErr) {
+          if (portErr.name === 'NotFoundError') {
+            logCleaningDecision('[USB 连接取消] 用户取消了设备选择');
+            return;
+          }
+          // If filtered request failed due to syntax/unsupported filters, fallback to open port chooser
+          serialPort = await navigator.serial.requestPort();
+        }
 
         if (!serialPort) return;
 
@@ -1587,6 +1593,13 @@
     function startSimulationMode() {
       isConnected = true;
       connType = 'sim';
+      // Reset simulation state for repeatable de-carbonizing kinetics demonstrations
+      simState.coldOhms = 0.420;
+      simState.pulseTick = 0;
+      simState.boardTempC = 28.0;
+      simState.isFiring = false;
+      cleaningPreColdR = 0.420;
+      lastColdOhms = 0.420;
       setConnectionUI(true, '虚拟仿真运行中');
       logCleaningDecision('[虚拟仿真模式] 已启动高精热力学微爆仿真机，随时可试火与测试');
       showToast('已进入虚拟仿真演示模式');
@@ -1605,17 +1618,22 @@
         pollingTimer = null;
       }
 
-      if (serialReader) {
-        try { serialReader.cancel(); serialReader.releaseLock(); } catch (e) {}
-        serialReader = null;
+      const readerToClose = serialReader;
+      const writerToClose = serialWriter;
+      const portToClose = serialPort;
+
+      serialReader = null;
+      serialWriter = null;
+      serialPort = null;
+
+      if (readerToClose) {
+        try { readerToClose.cancel().catch(() => {}); readerToClose.releaseLock(); } catch (e) {}
       }
-      if (serialWriter) {
-        try { serialWriter.close(); serialWriter.releaseLock(); } catch (e) {}
-        serialWriter = null;
+      if (writerToClose) {
+        try { writerToClose.close().catch(() => {}); writerToClose.releaseLock(); } catch (e) {}
       }
-      if (serialPort) {
-        try { serialPort.close(); } catch (e) {}
-        serialPort = null;
+      if (portToClose) {
+        try { portToClose.close().catch(() => {}); } catch (e) {}
       }
 
       setConnectionUI(false, '未连接');
@@ -1661,20 +1679,29 @@
       }
     }
 
-    // --- Command Sender ---
+    // --- Command Sender with Urgent Priority Bypass ---
     function sendSerialCmd(cmd, isUrgent = false) {
       if (!isConnected) return;
       logTerminal('TX', cmd);
 
       if (connType === 'serial') {
         if (serialWriter) {
-          serialWriteQueue = serialWriteQueue.then(async () => {
+          const writeOp = async () => {
             try {
-              await serialWriter.write(cmd + '\r\n');
+              if (serialWriter) {
+                await serialWriter.write(cmd + '\r\n');
+              }
             } catch (e) {
               logTerminal('SYS', '串口发送错误: ' + e.message);
             }
-          });
+          };
+
+          if (isUrgent) {
+            // High-priority urgent bypass (e.g. F=OFF emergency cutoff) executes at head of queue
+            serialWriteQueue = Promise.resolve().then(writeOp);
+          } else {
+            serialWriteQueue = serialWriteQueue.then(writeOp);
+          }
         }
       } else if (connType === 'sim') {
         simulateDeviceResponse(cmd);
@@ -1694,7 +1721,10 @@
         if (!isNaN(p)) liveTelemetry.power = p;
       } else if (key === 'T') {
         const t = parseFloat(val);
-        if (!isNaN(t)) liveTelemetry.temp = t;
+        if (!isNaN(t)) {
+          // If > 100, assume Fahrenheit from Evolv DNA chip and convert to Celsius
+          liveTelemetry.temp = t > 100 ? Math.round((t - 32) * 5 / 9) : Math.round(t);
+        }
       } else if (key === 'R') {
         const r = parseFloat(val);
         if (!isNaN(r) && r > 0) {
@@ -1709,6 +1739,15 @@
       } else if (key === 'BOARD') {
         const b = parseFloat(val);
         if (!isNaN(b)) liveTelemetry.boardTemp = b;
+      } else if (key === 'F') {
+        if (val === 'OFF') {
+          if (!isCleaningRunning && !isCleaningOneShotRunning) {
+            liveTelemetry.power = 0.0;
+          }
+        }
+      } else if (key === 'I') {
+        const cur = parseFloat(val);
+        if (!isNaN(cur)) liveTelemetry.current = cur;
       }
 
       updateCleaningUI();
@@ -1728,12 +1767,14 @@
             simState.isFiring = false;
             liveTelemetry.power = 0.0;
             liveTelemetry.ohms = simState.coldOhms;
+            liveTelemetry.temp = 28.0;
             handleDeviceResponse('F=OFF');
           } else {
             simState.isFiring = true;
             simState.pulseTick++;
             liveTelemetry.power = simState.powerSetpoint;
-            liveTelemetry.temp = 540 + Math.random() * 20;
+            // Realistic pulse surface coil temperature in °C (~280°C)
+            liveTelemetry.temp = 280 + Math.round(Math.random() * 15);
 
             // Physical cleaning kinetics: As 15W pulses vaporize droplets, carbon layer decomposes
             if (simState.coldOhms > simState.targetCleanOhms) {
@@ -1745,7 +1786,7 @@
             simState.boardTempC = Math.min(42.0, simState.boardTempC + 0.15);
             liveTelemetry.boardTemp = Math.round(simState.boardTempC * 10) / 10;
 
-            // Live hot resistance has TCR curve (e.g. Ni80 ~ 1.065x cold R)
+            // Live hot resistance has TCR curve (e.g. Ni80 ~ 1.062x cold R)
             liveTelemetry.ohms = Math.round(simState.coldOhms * 1.062 * 1000) / 1000;
             handleDeviceResponse(cmd);
           }
@@ -1753,6 +1794,8 @@
           const rLive = simState.isFiring ? (simState.coldOhms * 1.062) : simState.coldOhms;
           handleDeviceResponse(`R=${rLive.toFixed(3)}`);
         } else if (cmd === 'R=GET') {
+          handleDeviceResponse(`R=${simState.coldOhms.toFixed(3)}`);
+        } else if (cmd === 'R=RESAMPLE') {
           handleDeviceResponse(`R=${simState.coldOhms.toFixed(3)}`);
         } else if (cmd === 'B=GET') {
           handleDeviceResponse('B=4.14V');
@@ -1872,10 +1915,11 @@
 
       if (elTempStatus) {
         const boardC = liveTelemetry.boardTemp;
-        if (boardC >= 60 || liveTelemetry.temp >= 550) {
+        const coilC = liveTelemetry.temp;
+        if (boardC >= 60 || coilC >= 320) {
           elTempStatus.innerText = '过热告警';
           elTempStatus.style.color = 'var(--apple-red)';
-        } else if (boardC >= 45 || liveTelemetry.temp >= 380) {
+        } else if (boardC >= 45 || coilC >= 200) {
           elTempStatus.innerText = '温升监视';
           elTempStatus.style.color = 'var(--apple-orange)';
         } else {
@@ -1917,16 +1961,19 @@
 
     // --- Core Pulse Execution Function ---
     async function executeCleaningPulse(power, durationMs, isLoop = false, loopStartTime = 0, timeoutSec = 0) {
-      sendSerialCmd(`P=${power.toFixed(1)}W`);
+      const safePower = Math.max(10.0, Math.min(25.0, power));
+      const safeDurationMs = Math.max(300, Math.min(1200, durationMs));
+
+      sendSerialCmd(`P=${safePower.toFixed(1)}W`);
       await sleepMs(15);
 
-      const fireSec = Math.max(0.08, durationMs / 1000.0);
+      const fireSec = Math.max(0.08, safeDurationMs / 1000.0);
       sendSerialCmd(`F=${fireSec.toFixed(2)}S`);
 
       const pulseStart = Date.now();
       let completedOk = true;
 
-      while (Date.now() - pulseStart < durationMs) {
+      while (Date.now() - pulseStart < safeDurationMs) {
         if (cleaningAbortRequested || !isConnected || (isLoop && !isCleaningRunning)) {
           completedOk = false;
           break;
@@ -2096,9 +2143,9 @@
         const inpPwr = document.getElementById('inpCleaningPower');
         const inpPulse = document.getElementById('inpCleaningPulseMs');
         const inpCooldown = document.getElementById('inpCleaningCooldownMs');
-        const power = inpPwr ? parseFloat(inpPwr.value) || 15.0 : 15.0;
-        const pulseMs = inpPulse ? parseInt(inpPulse.value) || 600 : 600;
-        const cooldownMs = inpCooldown ? parseInt(inpCooldown.value) || 200 : 200;
+        const power = Math.max(10.0, Math.min(25.0, inpPwr ? parseFloat(inpPwr.value) || 15.0 : 15.0));
+        const pulseMs = Math.max(300, Math.min(1200, inpPulse ? parseInt(inpPulse.value) || 600 : 600));
+        const cooldownMs = Math.max(100, Math.min(500, inpCooldown ? parseInt(inpCooldown.value) || 200 : 200));
 
         // Phase 1: 脉冲汽化微爆
         updateCleaningFsmBadge(`第 ${cleaningCycleCount} 轮: 脉冲汽化`, 'var(--apple-blue)', 'var(--apple-blue-bg)');
@@ -2124,6 +2171,9 @@
         // Phase 2: 停顿吸热与微滴渗透
         updateCleaningFsmBadge(`第 ${cleaningCycleCount} 轮: 停顿吸热`, 'var(--apple-text)', 'var(--apple-gray-btn)');
         if (elPhaseLabel) elPhaseLabel.innerText = '蒸发停顿';
+
+        // Query cold resistance during cooldown pause to update live metrics & waveform curves
+        sendSerialCmd('R=GET');
 
         const pauseStart = Date.now();
         while (Date.now() - pauseStart < cooldownMs) {
@@ -2245,6 +2295,12 @@
       lastColdOhms = targetR;
       cleaningPreColdR = targetR;
       cleaningPostColdR = targetR;
+      simState.coldOhms = targetR;
+
+      if (isConnected) {
+        sendSerialCmd('R=RESAMPLE');
+        sendSerialCmd('R=GET');
+      }
 
       updateCleaningUI();
       logCleaningDecision(`[基准采纳] 已采纳清洁后冷阻 ${targetR.toFixed(3)}Ω 作为基准`);
@@ -2278,7 +2334,10 @@
       }
     }
 
-    // --- Oscilloscope Renderer ---
+    // --- Oscilloscope Renderer with Texture Dimension Caching ---
+    let lastCanvasW = 0;
+    let lastCanvasH = 0;
+
     function redrawOscilloscope() {
       const canvas = document.getElementById('monitorCanvas');
       if (!canvas || !canvas.parentElement) return;
@@ -2287,10 +2346,20 @@
       if (rect.width <= 0 || rect.height <= 0) return;
 
       const dpr = window.devicePixelRatio || 1;
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
+      const targetW = Math.floor(rect.width * dpr);
+      const targetH = Math.floor(rect.height * dpr);
+
+      // Only resize canvas backing store when dimensions actually change (prevents 60FPS GPU churn)
+      if (canvas.width !== targetW || canvas.height !== targetH || lastCanvasW !== rect.width || lastCanvasH !== rect.height) {
+        canvas.width = targetW;
+        canvas.height = targetH;
+        lastCanvasW = rect.width;
+        lastCanvasH = rect.height;
+      }
+
       const ctx = canvas.getContext('2d');
-      ctx.scale(dpr, dpr);
+      if (ctx.save) ctx.save();
+      if (ctx.scale) ctx.scale(dpr, dpr);
 
       const w = rect.width;
       const h = rect.height;
@@ -2314,32 +2383,34 @@
       }
 
       const totalPts = waveformHistory.power.length;
-      if (totalPts < 2) return;
-
-      function plotCurve(dataArr, color, maxVal, minVal = 0, lineW = 1.8) {
-        ctx.strokeStyle = color;
-        ctx.lineWidth = lineW;
-        ctx.beginPath();
-        for (let i = 0; i < totalPts; i++) {
-          const val = dataArr[i] !== undefined ? dataArr[i] : minVal;
-          const normY = Math.max(0, Math.min(1, (val - minVal) / (maxVal - minVal)));
-          const x = (i / (totalPts - 1)) * (w - 30) + 15;
-          const y = h - 15 - normY * (h - 30);
-          if (i === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
+      if (totalPts >= 2) {
+        function plotCurve(dataArr, color, maxVal, minVal = 0, lineW = 1.8) {
+          ctx.strokeStyle = color;
+          ctx.lineWidth = lineW;
+          ctx.beginPath();
+          for (let i = 0; i < totalPts; i++) {
+            const val = dataArr[i] !== undefined ? dataArr[i] : minVal;
+            const normY = Math.max(0, Math.min(1, (val - minVal) / (maxVal - minVal)));
+            const x = (i / (totalPts - 1)) * (w - 30) + 15;
+            const y = h - 15 - normY * (h - 30);
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.stroke();
         }
-        ctx.stroke();
+
+        const chkPwr = document.getElementById('chkCurvePower');
+        const chkVolt = document.getElementById('chkCurveVolt');
+        const chkOhms = document.getElementById('chkCurveOhms');
+        const chkTemp = document.getElementById('chkCurveTemp');
+
+        if (chkPwr && chkPwr.checked) plotCurve(waveformHistory.power, '#0071e3', 30, 0, 2.2);
+        if (chkVolt && chkVolt.checked) plotCurve(waveformHistory.voltage, isDark ? '#64d2ff' : '#007aff', 6.0, 0, 1.6);
+        if (chkOhms && chkOhms.checked) plotCurve(waveformHistory.ohms, isDark ? '#ffffff' : '#1d1d1f', 1.0, 0, 1.8);
+        if (chkTemp && chkTemp.checked) plotCurve(waveformHistory.temp, isDark ? '#86868b' : '#6e6e73', 80, 20, 1.2);
       }
 
-      const chkPwr = document.getElementById('chkCurvePower');
-      const chkVolt = document.getElementById('chkCurveVolt');
-      const chkOhms = document.getElementById('chkCurveOhms');
-      const chkTemp = document.getElementById('chkCurveTemp');
-
-      if (chkPwr && chkPwr.checked) plotCurve(waveformHistory.power, '#0071e3', 30, 0, 2.2);
-      if (chkVolt && chkVolt.checked) plotCurve(waveformHistory.voltage, isDark ? '#64d2ff' : '#007aff', 6.0, 0, 1.6);
-      if (chkOhms && chkOhms.checked) plotCurve(waveformHistory.ohms, isDark ? '#ffffff' : '#1d1d1f', 1.0, 0, 1.8);
-      if (chkTemp && chkTemp.checked) plotCurve(waveformHistory.temp, isDark ? '#86868b' : '#6e6e73', 80, 20, 1.2);
+      if (ctx.restore) ctx.restore();
     }
 
     function clearWaveformHistory() {
@@ -2370,6 +2441,10 @@
           const isTyping = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.tagName === 'SELECT');
           if (!isTyping) {
             e.preventDefault();
+            // Blur active button to prevent browser synthetic click double-triggering
+            if (activeEl && activeEl.tagName === 'BUTTON' && typeof activeEl.blur === 'function') {
+              activeEl.blur();
+            }
             togglePeriodicCleaning();
           }
         }

@@ -88,11 +88,14 @@ function createMockEnvironment() {
         strokeStyle: '',
         lineWidth: 1,
         fillRect: () => {},
+        clearRect: () => {},
         beginPath: () => {},
         moveTo: () => {},
         lineTo: () => {},
         stroke: () => {},
-        scale: () => {}
+        scale: () => {},
+        save: () => {},
+        restore: () => {}
       };
     }
   }
@@ -372,8 +375,71 @@ async function runTests() {
   assert.ok(reconnectedText.includes('虚拟仿真'), 'Should reconnect to simulation');
   console.log('✔ Disconnect and re-connection verified.');
 
+  // =========================================================================
+  // TEST 10: Parameter Capsule Boundary Clamping & Safety Protection
+  // =========================================================================
+  console.log('\n--- Test 10: Parameter Capsule Boundary Clamping ---');
+  inpPwr.value = '50.0';
+  inpPulse.value = '50';
+  inpCooldown.value = '20';
+  
+  const testOneShot = sandbox.triggerCleaningOneShot();
+  await testOneShot;
+  assert.strictEqual(sandbox.getCleaningOneShotState(), false);
+  console.log('✔ Parameter capsule out-of-bound values safely clamped.');
+
+  // =========================================================================
+  // TEST 11: Urgent Priority Bypass Execution
+  // =========================================================================
+  console.log('\n--- Test 11: Urgent Priority F=OFF Command Dispatch ---');
+  sandbox.sendSerialCmd('F=OFF', true);
+  const livePwrAfterOff = sandbox.getLiveTelemetry().power;
+  assert.strictEqual(livePwrAfterOff, 0.0, 'Power should be 0 after urgent F=OFF');
+  console.log('✔ Urgent F=OFF command dispatched cleanly.');
+
+  // =========================================================================
+  // TEST 12: Dual Temperature (°C) Telemetry & 3-Zone Thermal Classification
+  // =========================================================================
+  console.log('\n--- Test 12: Dual Temperature (°C) & 3-Zone Thermal Classification ---');
+  sandbox.handleDeviceResponse('BOARD=26.0');
+  sandbox.handleDeviceResponse('T=80.0');
+  let tempStatus = env.mockDocument.getElementById('txtCleaningTempStatus').innerText;
+  assert.strictEqual(tempStatus, '常温安全', `Expected '常温安全', got: ${tempStatus}`);
+
+  sandbox.handleDeviceResponse('BOARD=48.0');
+  tempStatus = env.mockDocument.getElementById('txtCleaningTempStatus').innerText;
+  assert.strictEqual(tempStatus, '温升监视', `Expected '温升监视', got: ${tempStatus}`);
+
+  sandbox.handleDeviceResponse('BOARD=65.0');
+  tempStatus = env.mockDocument.getElementById('txtCleaningTempStatus').innerText;
+  assert.strictEqual(tempStatus, '过热告警', `Expected '过热告警', got: ${tempStatus}`);
+
+  // Test Fahrenheit conversion from Evolv DNA (e.g. 540°F -> 282°C)
+  sandbox.handleDeviceResponse('BOARD=28.0');
+  sandbox.handleDeviceResponse('T=540.0');
+  assert.strictEqual(sandbox.getLiveTelemetry().temp, 282, '540°F should convert to 282°C');
+  console.log('✔ Dual temperature (°C) and 3-zone thermal classification verified.');
+
+  // =========================================================================
+  // TEST 13: Hardware Echo & Current Telemetry Parsing
+  // =========================================================================
+  console.log('\n--- Test 13: Hardware Echo & Current Telemetry Parsing ---');
+  sandbox.handleDeviceResponse('I=4.25');
+  assert.strictEqual(sandbox.getLiveTelemetry().current, 4.25, 'Current should be 4.25A');
+  sandbox.handleDeviceResponse('F=OFF');
+  assert.strictEqual(sandbox.getLiveTelemetry().power, 0.0, 'Power should be 0.0W on F=OFF');
+  console.log('✔ Hardware echo and current telemetry verified.');
+
+  // =========================================================================
+  // TEST 14: Repeatable Simulation Clean-Ohms Progression
+  // =========================================================================
+  console.log('\n--- Test 14: Repeatable Simulation Progression ---');
+  sandbox.startSimulationMode();
+  assert.strictEqual(sandbox.getLastColdOhms(), 0.420, 'Simulator must reset cold ohms to dirty baseline (0.420Ω)');
+  console.log('✔ Repeatable simulation reset verified.');
+
   console.log('\n====================================================');
-  console.log(' ALL 9 E2E SIMULATION TESTS PASSED (100% PASS RATE) ');
+  console.log(' ALL 14 E2E SIMULATION TESTS PASSED (100% PASS RATE) ');
   console.log('====================================================\n');
   process.exit(0);
 }

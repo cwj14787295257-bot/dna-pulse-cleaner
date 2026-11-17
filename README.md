@@ -38,7 +38,7 @@
   - ② 实时脉冲输出功率与电压计算 ($V = \sqrt{P \times R}$)
   - ③ 动态 SVG 环形时钟倒计时与状态倒计时
   - ④ 累计微爆脉冲轮次与吸收能量估算 ($J = \sum P \times t$)
-  - ⑤ 发热丝与主板芯片温度监视 (°C / °F) 及 3 级热态预警
+  - ⑤ 发热丝与主板芯片温度监视 (°C) 及 3 级热态预警 ("常温安全" / "温升监视" / "过热告警")
 - 📈 **60 FPS 紧凑型微阻动态示波器**:
   - 实时绘制功率脉冲、输出电压、动态阻抗曲线，直观洞察液滴沸腾与微爆扰动；
 - ✨ **智能沉淀与结算报告卡片**:
@@ -129,8 +129,8 @@ Combining millisecond-accurate 15.0W pulse heating kinetics with medical-grade 3
 本工程包含完整的端到端自动化测试套件：
 
 - `node verify_syntax.js`: 校验 `index.html` 内联 JavaScript 语法的正确编译（Node.js VM 校验）。
-- `node verify_dom_elements.js`: 校验 30+ 核心 DOM 节点 ID 与关键函数签名的完整性。
-- `node test_e2e_simulation.js`: 在沙箱中执行端到端全链路时序测试（连接、单发脉冲、循环微爆、30s 超时保护、结算卡片生成、阻值采纳、空格快捷键等）。
+- `node verify_dom_elements.js`: 校验 50 核心 DOM 节点 ID 与 40 关键函数签名的完整性。
+- `node test_e2e_simulation.js`: 在沙箱中执行 14 项端到端全链路时序与边界测试（连接、单发脉冲、循环微爆、安全超时保护、结算卡片、阻值采纳、空格键防双重触发、暗亮色主题、紧急停机截断、温度单位换算等）。
 
 执行测试：
 ```bash
