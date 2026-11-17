@@ -123,7 +123,18 @@ function createMockEnvironment() {
     createElement: (tag) => new MockElement(`auto_${Date.now()}_${Math.random().toString(36).slice(2,6)}`, tag)
   };
 
+  const themeStorage = new Map();
+  const themeListeners = [];
+  const systemTheme = {
+    matches: false,
+    addEventListener: (event, fn) => { if (event === 'change') themeListeners.push(fn); }
+  };
   const mockWindow = {
+    matchMedia: () => systemTheme,
+    localStorage: {
+      getItem: key => themeStorage.get(key) || null,
+      setItem: (key, value) => themeStorage.set(key, value)
+    },
     addEventListener: (evt, fn) => {
       if (!eventListeners[evt]) eventListeners[evt] = [];
       eventListeners[evt].push(fn);
@@ -152,7 +163,12 @@ function createMockEnvironment() {
     mockDocument,
     mockWindow,
     mockNavigator,
-    getClipboard: () => copiedClipboardText
+    getClipboard: () => copiedClipboardText,
+    setSystemDark: dark => {
+      systemTheme.matches = dark;
+      themeListeners.forEach(fn => fn({ matches: dark }));
+    },
+    themeStorage
   };
 }
 
@@ -354,12 +370,28 @@ async function runTests() {
   // TEST 8: Theme Switcher
   // =========================================================================
   console.log('\n--- Test 8: Theme Mode Switcher ---');
-  assert.strictEqual(env.mockDocument.body.getAttribute('data-theme'), 'dark', 'Initial theme should be dark');
+  assert.strictEqual(env.mockDocument.body.getAttribute('data-theme'), 'light', 'Initial theme should be light without a system dark preference');
   sandbox.toggleThemeMode();
-  assert.strictEqual(env.mockDocument.body.getAttribute('data-theme'), 'light', 'Theme should switch to light');
+  assert.strictEqual(env.mockDocument.body.getAttribute('data-theme'), 'dark', 'Theme should switch to dark');
   sandbox.toggleThemeMode();
-  assert.strictEqual(env.mockDocument.body.getAttribute('data-theme'), 'dark', 'Theme should switch back to dark');
-  console.log('✔ Theme switching dark/light verified.');
+  assert.strictEqual(env.mockDocument.body.getAttribute('data-theme'), 'light', 'Theme should switch back to light');
+  env.setSystemDark(true);
+  assert.strictEqual(env.mockDocument.body.getAttribute('data-theme'), 'light', 'Explicit light mode should ignore system changes');
+  sandbox.setThemePreference('system');
+  assert.strictEqual(env.mockDocument.body.getAttribute('data-theme'), 'dark', 'System mode should adopt the current dark preference');
+  env.setSystemDark(false);
+  assert.strictEqual(env.mockDocument.body.getAttribute('data-theme'), 'light', 'System changes should update the active theme');
+  sandbox.setThemePreference('dark');
+  assert.strictEqual(env.themeStorage.get('dna-pulse-appearance'), 'dark', 'Explicit preference should persist');
+  sandbox.initializeAppearance();
+  assert.strictEqual(env.mockDocument.getElementById('btnThemeToggle').value, 'dark', 'Appearance control should restore the saved preference');
+  const storage = env.mockWindow.localStorage;
+  env.mockWindow.localStorage = { getItem: () => { throw new Error('blocked'); }, setItem: () => { throw new Error('blocked'); } };
+  sandbox.initializeAppearance();
+  sandbox.setThemePreference('light');
+  assert.strictEqual(env.mockDocument.body.getAttribute('data-theme'), 'light', 'Theme switching should work when storage is blocked');
+  env.mockWindow.localStorage = storage;
+  console.log('✔ Theme switching, system updates, persistence, and blocked storage verified.');
 
   // =========================================================================
   // TEST 9: Disconnect and Reconnect

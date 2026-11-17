@@ -10,6 +10,12 @@
 
 ---
 
+**在线使用**：[DNA Pulse Cleaner](https://cwj14787295257-bot.github.io/dna-pulse-cleaner/)
+
+**项目仓库**：[GitHub](https://github.com/cwj14787295257-bot/dna-pulse-cleaner)
+
+新版控制台支持桌面与手机布局，外观默认跟随系统，也可选择浅色或深色并记住偏好。无硬件时可选择「虚拟演示」。
+
 ## 简体中文 (Chinese)
 
 ### 1. 项目简介
