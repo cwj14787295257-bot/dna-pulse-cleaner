@@ -1,0 +1,2416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DNA Pulse Cleaner | 15W H₂O₂ 芯片微爆积碳清洁系统</title>
+  <meta name="description" content="基于 Evolv DNA 原生 CDC ACM 极速脉冲与 3% 双氧水汽化微爆技术的专业发热丝积碳剥离与冷阻净化工具">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💧</text></svg>">
+  
+  <style>
+    /* ===================================================================
+       1. Apple Design System & Color Tokens (Adaptive Dark / Light)
+       =================================================================== */
+    :root {
+      /* Dark Theme Tokens (Default) */
+      --apple-bg: #000000;
+      --apple-surface: #0c0c0e;
+      --apple-card: #141416;
+      --apple-card-secondary: #1c1c1e;
+      --apple-card-hover: #242426;
+      --apple-border: #2c2c2e;
+      --apple-border-subtle: rgba(255, 255, 255, 0.08);
+      --apple-border-highlight: rgba(255, 255, 255, 0.16);
+      --apple-text: #ffffff;
+      --apple-text-secondary: #86868b;
+      --apple-text-muted: #636366;
+      --apple-blue: #0071e3;
+      --apple-blue-hover: #0077ed;
+      --apple-blue-active: #0062c4;
+      --apple-blue-bg: rgba(0, 113, 227, 0.14);
+      --apple-blue-border: rgba(0, 113, 227, 0.32);
+      --apple-red: #ff453a;
+      --apple-red-hover: #ff5447;
+      --apple-red-bg: rgba(255, 69, 58, 0.14);
+      --apple-red-border: rgba(255, 69, 58, 0.35);
+      --apple-orange: #ff9f0a;
+      --apple-orange-bg: rgba(255, 159, 10, 0.14);
+      --apple-green: #30d158;
+      --apple-green-bg: rgba(48, 209, 88, 0.14);
+      --apple-cyan: #64d2ff;
+      --apple-gray-btn: rgba(255, 255, 255, 0.08);
+      --apple-gray-btn-hover: rgba(255, 255, 255, 0.14);
+      --apple-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+      --apple-shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.3);
+      --apple-toast-bg: rgba(30, 30, 32, 0.94);
+      --apple-header-bg: rgba(0, 0, 0, 0.75);
+    }
+
+    [data-theme="light"] {
+      /* Light Theme Tokens */
+      --apple-bg: #f5f5f7;
+      --apple-surface: #ffffff;
+      --apple-card: #ffffff;
+      --apple-card-secondary: #fbfbfd;
+      --apple-card-hover: #f0f0f2;
+      --apple-border: #d2d2d7;
+      --apple-border-subtle: rgba(0, 0, 0, 0.08);
+      --apple-border-highlight: rgba(0, 0, 0, 0.18);
+      --apple-text: #1d1d1f;
+      --apple-text-secondary: #6e6e73;
+      --apple-text-muted: #86868b;
+      --apple-blue: #0071e3;
+      --apple-blue-hover: #0077ed;
+      --apple-blue-active: #0062c4;
+      --apple-blue-bg: rgba(0, 113, 227, 0.08);
+      --apple-blue-border: rgba(0, 113, 227, 0.22);
+      --apple-red: #d70015;
+      --apple-red-hover: #c00013;
+      --apple-red-bg: rgba(215, 0, 21, 0.08);
+      --apple-red-border: rgba(215, 0, 21, 0.22);
+      --apple-orange: #c93400;
+      --apple-orange-bg: rgba(201, 52, 0, 0.08);
+      --apple-green: #248a3d;
+      --apple-green-bg: rgba(36, 138, 61, 0.08);
+      --apple-cyan: #007aff;
+      --apple-gray-btn: rgba(0, 0, 0, 0.05);
+      --apple-gray-btn-hover: rgba(0, 0, 0, 0.09);
+      --apple-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+      --apple-shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.04);
+      --apple-toast-bg: rgba(255, 255, 255, 0.95);
+      --apple-header-bg: rgba(245, 245, 247, 0.82);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: var(--apple-bg);
+      color: var(--apple-text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.45;
+      transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ===================================================================
+       2. Sticky Navigation Header
+       =================================================================== */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--apple-header-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--apple-border-subtle);
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #0071e3 0%, #4facfe 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 4px 12px rgba(0, 113, 227, 0.35);
+      flex-shrink: 0;
+    }
+
+    .brand-text-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-version {
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 6px;
+      background: var(--apple-blue-bg);
+      color: var(--apple-blue);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: var(--apple-text-secondary);
+      font-weight: 400;
+    }
+
+    /* Mode Switcher Segmented Control */
+    .segmented-control {
+      display: flex;
+      background: var(--apple-card-secondary);
+      border: 1px solid var(--apple-border-subtle);
+      border-radius: 980px;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .segmented-btn {
+      border: none;
+      background: transparent;
+      color: var(--apple-text-secondary);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 980px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .segmented-btn:hover {
+      color: var(--apple-text);
+    }
+
+    .segmented-btn.active {
+      background: var(--apple-card);
+      color: var(--apple-text);
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Right Action Bar */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 980px;
+      font-size: 11px;
+      font-weight: 500;
+      background: var(--apple-card-secondary);
+      border: 1px solid var(--apple-border-subtle);
+      color: var(--apple-text-secondary);
+      transition: all 0.2s;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #86868b;
+      transition: background-color 0.25s, box-shadow 0.25s;
+    }
+
+    .status-dot.connected {
+      background: #30d158;
+      box-shadow: 0 0 8px rgba(48, 209, 88, 0.7);
+    }
+
+    .status-dot.firing {
+      background: #0071e3;
+      box-shadow: 0 0 10px rgba(0, 113, 227, 0.9);
+      animation: pulse-glow 1s infinite alternate;
+    }
+
+    @keyframes pulse-glow {
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(1.35); opacity: 1; }
+    }
+
+    /* Common Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border-radius: 980px;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 7px 16px;
+      cursor: pointer;
+      border: 1px solid var(--apple-border-subtle);
+      background: var(--apple-gray-btn);
+      color: var(--apple-text);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      background: var(--apple-gray-btn-hover);
+      border-color: var(--apple-border-highlight);
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-icon {
+      padding: 7px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 14px;
+    }
+
+    .btn-primary {
+      background: var(--apple-blue);
+      border-color: var(--apple-blue);
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background: var(--apple-blue-hover);
+      border-color: var(--apple-blue-hover);
+      box-shadow: 0 2px 10px rgba(0, 113, 227, 0.35);
+    }
+
+    .btn-danger {
+      background: var(--apple-red) !important;
+      border-color: var(--apple-red) !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 14px rgba(255, 69, 58, 0.45);
+      animation: danger-pulse 1.2s infinite alternate;
+    }
+
+    @keyframes danger-pulse {
+      0% { box-shadow: 0 0 8px rgba(255, 69, 58, 0.3); }
+      100% { box-shadow: 0 0 18px rgba(255, 69, 58, 0.7); }
+    }
+
+    /* ===================================================================
+       3. Main Layout & Bento Grid
+       =================================================================== */
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 24px 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      text-align: center;
+      padding: 16px 20px 8px;
+    }
+
+    .hero-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, var(--apple-text) 30%, var(--apple-text-secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 13px;
+      color: var(--apple-text-secondary);
+      max-width: 760px;
+      margin: 0 auto 12px;
+      line-height: 1.5;
+    }
+
+    .chips-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .feature-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 980px;
+      background: var(--apple-card-secondary);
+      color: var(--apple-text-muted);
+      border: 1px solid var(--apple-border-subtle);
+    }
+
+    .feature-chip.active {
+      color: var(--apple-blue);
+      border-color: var(--apple-blue-border);
+      background: var(--apple-blue-bg);
+      font-weight: 500;
+    }
+
+    /* Bento Card */
+    .bento-card {
+      background: var(--apple-card);
+      border: 1px solid var(--apple-border-subtle);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: var(--apple-shadow-sm);
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+
+    .bento-card:hover {
+      border-color: var(--apple-border-highlight);
+    }
+
+    /* Console Controls Row */
+    .console-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .console-left-tags {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 12px;
+      border-radius: 980px;
+      border: 1px solid var(--apple-border-subtle);
+      background: var(--apple-gray-btn);
+      color: var(--apple-text-secondary);
+      transition: all 0.25s;
+    }
+
+    .badge-primary {
+      background: var(--apple-blue-bg);
+      color: var(--apple-blue);
+      border-color: var(--apple-blue-border);
+    }
+
+    .console-params-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Micro-adjust Parameter Capsule */
+    .param-capsule {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--apple-card-secondary);
+      padding: 4px 10px;
+      border-radius: 980px;
+      border: 1px solid var(--apple-border-subtle);
+      font-size: 11px;
+      transition: border-color 0.2s;
+    }
+
+    .param-capsule:focus-within {
+      border-color: var(--apple-blue);
+      box-shadow: 0 0 0 2px var(--apple-blue-bg);
+    }
+
+    .param-label {
+      color: var(--apple-text-secondary);
+    }
+
+    .param-input {
+      background: transparent;
+      border: none;
+      color: var(--apple-text);
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .param-input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    .param-input::-webkit-outer-spin-button,
+    .param-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .param-select {
+      background: transparent;
+      border: none;
+      color: var(--apple-text);
+      font-size: 11px;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .param-select option {
+      background: var(--apple-card);
+      color: var(--apple-text);
+    }
+
+    .param-unit {
+      color: var(--apple-text-muted);
+      font-size: 10px;
+    }
+
+    /* Action Buttons in Console */
+    .console-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ===================================================================
+       4. 5-Tile Live Metrics Dashboard
+       =================================================================== */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+
+    .metric-tile {
+      background: var(--apple-card-secondary);
+      border: 1px solid var(--apple-border-subtle);
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .metric-tile:hover {
+      border-color: var(--apple-border-highlight);
+      background: var(--apple-card-hover);
+    }
+
+    .metric-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--apple-text-secondary);
+      font-weight: 500;
+    }
+
+    .metric-subtag {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--apple-blue);
+    }
+
+    .metric-value-row {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--apple-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .metric-value-unit {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--apple-text-muted);
+    }
+
+    .metric-secondary-text {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--apple-text-secondary);
+    }
+
+    /* SVG Circular Progress */
+    .ring-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--apple-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ring-svg {
+      transform: rotate(-90deg);
+      flex-shrink: 0;
+    }
+
+    .ring-bg {
+      fill: none;
+      stroke: var(--apple-border-subtle);
+      stroke-width: 3.5;
+    }
+
+    .ring-progress {
+      fill: none;
+      stroke: var(--apple-blue);
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-dasharray: 94.25; /* 2 * PI * 15 */
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 0.08s linear;
+    }
+
+    /* ===================================================================
+       5. Live Compact Oscilloscope Canvas
+       =================================================================== */
+    .oscilloscope-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .osc-title-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .osc-title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .osc-fps {
+      font-size: 10px;
+      color: var(--apple-text-secondary);
+      background: var(--apple-card-secondary);
+      padding: 2px 8px;
+      border-radius: 980px;
+      border: 1px solid var(--apple-border-subtle);
+    }
+
+    .osc-channels {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 11px;
+      flex-wrap: wrap;
+    }
+
+    .channel-label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      user-select: none;
+      font-weight: 500;
+    }
+
+    .channel-label input[type="checkbox"] {
+      cursor: pointer;
+      accent-color: var(--apple-blue);
+    }
+
+    .canvas-wrapper {
+      position: relative;
+      width: 100%;
+      height: 180px;
+      background: var(--apple-surface);
+      border: 1px solid var(--apple-border-subtle);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    #monitorCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .canvas-legend-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: var(--apple-text-muted);
+      margin-top: 6px;
+      padding: 0 4px;
+    }
+
+    /* ===================================================================
+       6. H2O2 Scientific Guidance Banner
+       =================================================================== */
+    .guide-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 12px;
+      line-height: 1.55;
+      background: var(--apple-blue-bg);
+      border: 1px solid var(--apple-blue-border);
+      padding: 14px 18px;
+      border-radius: 14px;
+      color: var(--apple-text);
+    }
+
+    .guide-icon {
+      font-size: 22px;
+      line-height: 1;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .guide-title {
+      font-weight: 700;
+      color: var(--apple-blue);
+      margin-bottom: 2px;
+    }
+
+    .guide-desc {
+      color: var(--apple-text-secondary);
+    }
+
+    .guide-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+      font-size: 11px;
+    }
+
+    .guide-step-item {
+      background: var(--apple-card);
+      border: 1px solid var(--apple-border-subtle);
+      border-radius: 8px;
+      padding: 6px 10px;
+    }
+
+    .guide-step-tag {
+      font-weight: 600;
+      color: var(--apple-blue);
+    }
+
+    /* ===================================================================
+       7. Decision Stream & Live Log Line
+       =================================================================== */
+    .log-stream-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      font-family: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+      background: var(--apple-card-secondary);
+      padding: 10px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--apple-border-subtle);
+    }
+
+    .log-tag {
+      color: var(--apple-blue);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .log-content {
+      color: var(--apple-text-secondary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+
+    .terminal-toggle {
+      font-size: 10px;
+      color: var(--apple-text-muted);
+      cursor: pointer;
+      text-decoration: underline;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .terminal-toggle:hover {
+      color: var(--apple-text);
+    }
+
+    .terminal-drawer {
+      display: none;
+      background: var(--apple-surface);
+      border: 1px solid var(--apple-border-subtle);
+      border-radius: 12px;
+      padding: 12px;
+      max-height: 180px;
+      overflow-y: auto;
+      font-family: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .term-line {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 3px;
+    }
+
+    .term-time { color: var(--apple-text-muted); }
+    .term-dir-tx { color: var(--apple-blue); font-weight: 600; }
+    .term-dir-rx { color: var(--apple-green); font-weight: 600; }
+    .term-dir-sys { color: var(--apple-orange); font-weight: 600; }
+
+    /* ===================================================================
+       8. Post-Cleaning Settlement Card
+       =================================================================== */
+    .settle-card {
+      display: none;
+      background: linear-gradient(180deg, var(--apple-card) 0%, var(--apple-card-secondary) 100%);
+      border: 1px solid var(--apple-blue-border);
+      border-radius: 18px;
+      padding: 18px 22px;
+      box-shadow: 0 10px 30px rgba(0, 113, 227, 0.15);
+      animation: slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slide-up {
+      0% { opacity: 0; transform: translateY(12px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .settle-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .settle-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .settle-sparkle {
+      font-size: 20px;
+    }
+
+    .settle-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--apple-text);
+    }
+
+    .settle-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .settle-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      background: var(--apple-bg);
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--apple-border-subtle);
+      margin-bottom: 12px;
+    }
+
+    .settle-metric-col {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .settle-metric-lbl {
+      font-size: 10px;
+      color: var(--apple-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .settle-metric-val {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--apple-text);
+    }
+
+    .settle-metric-val.highlight {
+      color: var(--apple-blue);
+    }
+
+    .settle-verdict-row {
+      font-size: 12px;
+      color: var(--apple-text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .settle-verdict-text {
+      font-weight: 600;
+      color: var(--apple-blue);
+    }
+
+    /* ===================================================================
+       9. Toast Notification Pill
+       =================================================================== */
+    .toast-pill {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(50px);
+      background: var(--apple-toast-bg);
+      color: var(--apple-text);
+      padding: 9px 20px;
+      border-radius: 980px;
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid var(--apple-border-highlight);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+    }
+
+    .toast-pill.visible {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Footer */
+    .app-footer {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--apple-text-muted);
+      border-top: 1px solid var(--apple-border-subtle);
+      padding-top: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-links a {
+      color: var(--apple-text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--apple-blue);
+    }
+
+    /* ===================================================================
+       10. Responsive Breakpoints
+       =================================================================== */
+    @media (max-width: 900px) {
+      .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .settle-metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 680px) {
+      .header-inner {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+      .segmented-control {
+        width: 100%;
+        justify-content: center;
+      }
+      .header-actions {
+        justify-content: space-between;
+      }
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+      .settle-metrics-grid {
+        grid-template-columns: 1fr;
+      }
+      .console-params-row {
+        width: 100%;
+      }
+      .param-capsule {
+        flex: 1;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body data-theme="dark">
+
+  <!-- ===================================================================
+       TOP STICKY HEADER
+       =================================================================== -->
+  <header class="app-header">
+    <div class="header-inner">
+      <!-- Left: Brand Logo & Status -->
+      <a href="#" class="brand-group" id="appBrandLogo" title="DNA Pulse Cleaner">
+        <div class="brand-icon">💧</div>
+        <div class="brand-text-col">
+          <div class="brand-title">
+            DNA Pulse Cleaner
+            <span class="brand-version">v1.0.0</span>
+          </div>
+          <div class="brand-sub">Evolv DNA 15W H₂O₂ 芯片微爆积碳清洁系统</div>
+        </div>
+      </a>
+
+      <!-- Center: Dual Mode Switcher -->
+      <div class="segmented-control" role="tablist" aria-label="连接模式">
+        <button id="btnModeHardware" class="segmented-btn active" onclick="switchConnectionMode('serial')" title="通过 Web Serial CDC 直连物理 Evolv DNA 芯片">
+          🔌 USB 硬件直连
+        </button>
+        <button id="btnModeSimulation" class="segmented-btn" onclick="switchConnectionMode('sim')" title="无硬件环境下的真实热力学虚拟微爆仿真">
+          ⚡ 虚拟演示模式
+        </button>
+      </div>
+
+      <!-- Right: Status Pill & Actions -->
+      <div class="header-actions">
+        <div class="status-pill" id="pillStatusWrapper">
+          <span class="status-dot" id="connectionStatusDot"></span>
+          <span id="connectionStatusText">未连接</span>
+        </div>
+
+        <!-- Light / Dark Theme Switch -->
+        <button class="btn btn-icon" id="btnThemeToggle" onclick="toggleThemeMode()" title="切换亮色/暗色主题">
+          🌓
+        </button>
+
+        <!-- Main Connect Button -->
+        <button class="btn btn-primary" id="btnConnectDevice" onclick="toggleDeviceConnection()">
+          连接 DNA 设备
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================================================================
+       MAIN WORKSPACE CONTENT
+       =================================================================== -->
+  <main class="main-container">
+
+    <!-- Hero Scientific Principle Section -->
+    <section class="hero-banner">
+      <h1 class="hero-title">15W 医用级双氧水脉冲积碳清洁</h1>
+      <p class="hero-subtitle">
+        基于 Evolv DNA 原生 CDC ACM 极速脉冲控制与 3% H₂O₂ 催化分解汽化微爆技术，安全剥离发热丝焦糊积碳与绝缘层，瞬间恢复发热丝纯净冷阻。
+      </p>
+      <div class="chips-row">
+        <span class="feature-chip active">✦ 零驱动直连 CDC ACM 115200</span>
+        <span class="feature-chip active">✦ 15.0W 恒定微爆热量窗口</span>
+        <span class="feature-chip active">✦ 30秒 智能防干烧自锁</span>
+        <span class="feature-chip active">✦ 空格键 (Space) 一键急停</span>
+        <span class="feature-chip active">✦ 支持 DNA 60 / 75C / 250C / 100C / 60C / 80C 全系</span>
+      </div>
+    </section>
+
+    <!-- Bento Card 1: 15W Pulse Cleaner Control Console -->
+    <section class="bento-card">
+      <div class="console-header">
+        <div class="console-left-tags">
+          <span id="cleaningFsmBadge" class="badge">待机就绪</span>
+          <span class="badge badge-primary">H₂O₂ 脉冲汽化微爆除碳</span>
+        </div>
+
+        <!-- Parameter Capsules -->
+        <div class="console-params-row">
+          <!-- 脉冲功率 (10.0W ~ 25.0W, 默认 15.0W) -->
+          <div class="param-capsule" title="脉冲点火功率，推荐 15.0W，既保证剧烈微爆又不烧焦网芯">
+            <span class="param-label">脉冲功率:</span>
+            <input type="number" id="inpCleaningPower" class="param-input" style="width: 48px;" value="15.0" step="0.5" min="10.0" max="25.0" onchange="updateCleaningUI()" oninput="updateCleaningUI()">
+            <span class="param-unit">W</span>
+          </div>
+
+          <!-- 脉冲脉宽 (300ms ~ 1200ms, 默认 600ms) -->
+          <div class="param-capsule" title="每次脉冲通电激发时长，推荐 600ms">
+            <span class="param-label">脉宽:</span>
+            <input type="number" id="inpCleaningPulseMs" class="param-input" style="width: 48px;" value="600" step="50" min="300" max="1200" onchange="updateCleaningUI()" oninput="updateCleaningUI()">
+            <span class="param-unit">ms</span>
+          </div>
+
+          <!-- 停顿吸热冷却窗 (100ms ~ 500ms, 默认 200ms) -->
+          <div class="param-capsule" title="每次脉冲之间的回温与双氧水渗透停顿，推荐 200ms">
+            <span class="param-label">停顿:</span>
+            <input type="number" id="inpCleaningCooldownMs" class="param-input" style="width: 44px;" value="200" step="50" min="100" max="500" onchange="updateCleaningUI()" oninput="updateCleaningUI()">
+            <span class="param-unit">ms</span>
+          </div>
+
+          <!-- 安全超时保护 (15s, 30s, 60s, continuous) -->
+          <div class="param-capsule" title="连续清洁安全防干烧自锁上限，推荐 30 秒">
+            <span class="param-label">安全超时:</span>
+            <select id="selCleaningTimeout" class="param-select" onchange="updateCleaningUI()">
+              <option value="15">15 秒</option>
+              <option value="30" selected>30 秒 (推荐)</option>
+              <option value="60">60 秒</option>
+              <option value="0">持续 (手动关)</option>
+            </select>
+          </div>
+
+          <!-- Controls -->
+          <div class="console-actions">
+            <button class="btn" id="btnCleaningOneShot" onclick="triggerCleaningOneShot()" title="单次 15W 点火测试汽化微爆与即时阻值">
+              单次测试
+            </button>
+            <button class="btn btn-primary" id="btnToggleCleaning" onclick="togglePeriodicCleaning()" title="按空格键也可快速启动或停止">
+              启动清洁 (空格)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bento Grid: 5-Tile Live Metrics Dashboard -->
+      <div class="metrics-grid">
+        <!-- Tile 1: 基准冷阻 (Rpre) vs 实时 -->
+        <div class="metric-tile" style="border-left: 3px solid var(--apple-blue);">
+          <div class="metric-label-row">
+            <span>基准冷阻 (Rpre) vs 实时</span>
+            <span id="txtCleaningLiveDeltaR" class="metric-subtag">ΔR: 0.0mΩ</span>
+          </div>
+          <div class="metric-value-row">
+            <span id="txtCleaningPreRcold" style="color: var(--apple-blue);">0.000</span>
+            <span class="metric-value-unit">Ω</span>
+            <span class="metric-secondary-text">(实时: <span id="txtCleaningLiveRcold" style="font-weight: 700; color: var(--apple-text);">0.000Ω</span>)</span>
+          </div>
+        </div>
+
+        <!-- Tile 2: 实时脉冲输出 (P / U) -->
+        <div class="metric-tile" style="border-left: 3px solid var(--apple-border-highlight);">
+          <div class="metric-label-row">
+            <span>实时脉冲输出 (P / U)</span>
+            <span id="txtCleaningPowerRange" class="metric-subtag">15.0W 设定</span>
+          </div>
+          <div class="metric-value-row">
+            <span id="txtCleaningPower">15.0</span>
+            <span class="metric-value-unit">W</span>
+            <span style="font-size: 11px; color: var(--apple-text-muted); margin: 0 2px;">|</span>
+            <span id="txtCleaningVoltage">0.00</span>
+            <span class="metric-value-unit">V</span>
+          </div>
+        </div>
+
+        <!-- Tile 3: 环形时钟与安全保护 -->
+        <div class="metric-tile" style="border-left: 3px solid var(--apple-blue);">
+          <div class="metric-label-row">
+            <span>环形时钟与安全保护</span>
+            <span id="txtCleaningPhaseLabel" class="metric-subtag">待机</span>
+          </div>
+          <div class="ring-container">
+            <svg id="svgCleaningRing" class="ring-svg" width="20" height="20" viewBox="0 0 36 36">
+              <circle class="ring-bg" cx="18" cy="18" r="15"></circle>
+              <circle id="circleCleaningRing" class="ring-progress" cx="18" cy="18" r="15"></circle>
+            </svg>
+            <span id="txtCleaningCountdown">待启动 (30s 安全超时)</span>
+          </div>
+        </div>
+
+        <!-- Tile 4: 累计脉冲轮次与热量估算 -->
+        <div class="metric-tile" style="border-left: 3px solid var(--apple-border-highlight);">
+          <div class="metric-label-row">
+            <span>累计脉冲轮次</span>
+            <span id="txtCleaningTotalEnergy" style="color: var(--apple-text-muted); font-size: 10px;">0.0 J 累计吸热</span>
+          </div>
+          <div class="metric-value-row">
+            <span id="txtCleaningCycleCount" style="color: var(--apple-blue);">0</span>
+            <span class="metric-value-unit">轮</span>
+          </div>
+        </div>
+
+        <!-- Tile 5: 温度监视 (线圈 / 芯片) -->
+        <div class="metric-tile" style="border-left: 3px solid var(--apple-border-highlight);">
+          <div class="metric-label-row">
+            <span>温度监视 (线圈 / 芯片)</span>
+            <span id="txtCleaningTempStatus" style="color: var(--apple-green); font-size: 10px; font-weight: 600;">常温安全</span>
+          </div>
+          <div class="metric-value-row">
+            <span id="txtCleaningTempCoil">--</span>
+            <span class="metric-value-unit">°F</span>
+            <span style="font-size: 11px; color: var(--apple-text-muted); margin: 0 2px;">|</span>
+            <span id="txtCleaningTempBoard">28</span>
+            <span class="metric-value-unit">°C</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bento Card 2: Dedicated Live Oscilloscope Waveform Canvas -->
+    <section class="bento-card">
+      <div class="oscilloscope-header">
+        <div class="osc-title-group">
+          <span class="osc-title">实时微阻动态示波器</span>
+          <span id="fpsBadge" class="osc-fps">60 FPS 采样</span>
+        </div>
+
+        <!-- Waveform Channels -->
+        <div class="osc-channels">
+          <label class="channel-label" style="color: var(--apple-blue);">
+            <input type="checkbox" id="chkCurvePower" checked onchange="redrawOscilloscope()"> 功率 (W)
+          </label>
+          <label class="channel-label" style="color: var(--apple-cyan);">
+            <input type="checkbox" id="chkCurveVolt" checked onchange="redrawOscilloscope()"> 电压 (V)
+          </label>
+          <label class="channel-label" style="color: var(--apple-text);">
+            <input type="checkbox" id="chkCurveOhms" checked onchange="redrawOscilloscope()"> 阻抗 (Ω)
+          </label>
+          <label class="channel-label" style="color: var(--apple-text-secondary);">
+            <input type="checkbox" id="chkCurveTemp" checked onchange="redrawOscilloscope()"> 主板/线圈温 (°C)
+          </label>
+          <button class="btn" id="btnClearWaveform" onclick="clearWaveformHistory()" style="padding: 2px 10px; font-size: 10px;">
+            清空示波
+          </button>
+        </div>
+      </div>
+
+      <!-- High-DPI Canvas -->
+      <div class="canvas-wrapper">
+        <canvas id="monitorCanvas"></canvas>
+      </div>
+
+      <div class="canvas-legend-footer">
+        <span>◀ 脉冲微爆动态波动 (前 15 秒历时)</span>
+        <span id="lblWaveformBuffer">缓存: 0 采样点</span>
+        <span>当前实时采样 ▶</span>
+      </div>
+    </section>
+
+    <!-- Bento Card 3: H2O2 Scientific Operation Guidance -->
+    <section class="guide-banner">
+      <div class="guide-icon">💧</div>
+      <div style="flex: 1;">
+        <div class="guide-title">医用级双氧水 (H₂O₂) 脉冲微爆汽化除碳科学指引</div>
+        <div class="guide-desc">
+          发热丝长期使用后表面形成厚重的致密碳化物与焦糊焦油绝缘层。3% 医用双氧水在 15W 瞬间脉冲激发下，在热金属表面剧烈热解汽化（$2H_2O_2 \rightarrow 2H_2O + O_2 \uparrow$），产生的纳米级微气泡瞬间破裂产生微爆空化效应（Micro-cavitation），高速剥离绝缘积碳并氧化顽固残渣。
+        </div>
+        <div class="guide-steps">
+          <div class="guide-step-item">
+            <span class="guide-step-tag">Step 1: 润湿积碳</span><br>
+            向积碳线圈及网芯表面滴加 1~2 滴 3% 医用双氧水，充分浸润。
+          </div>
+          <div class="guide-step-item">
+            <span class="guide-step-tag">Step 2: 15W 脉冲微爆</span><br>
+            点击启动或按空格键，600ms 高频脉冲汽化除碳，观察微爆白汽。
+          </div>
+          <div class="guide-step-item">
+            <span class="guide-step-tag">Step 3: 沉淀测阻</span><br>
+            停止后系统自动静置 1 秒测量纯净冷阻，生成净化与结算报告。
+          </div>
+          <div class="guide-step-item">
+            <span class="guide-step-tag">Step 4: 安全准则</span><br>
+            请佩戴护目镜；液体蒸发干燥请及时补滴；防忘关自锁保护默认 30 秒。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Post-Cleaning Settlement Card -->
+    <section class="settle-card" id="cardCleaningSettle">
+      <div class="settle-header">
+        <div class="settle-title-group">
+          <span class="settle-sparkle">✨</span>
+          <span class="settle-title">双氧水脉冲清洁完成 - 阻值净化与结算报告</span>
+        </div>
+        <div class="settle-actions">
+          <button class="btn btn-primary" id="btnAdoptCleaningOhms" onclick="adoptCleaningColdOhms()">
+            采纳此阻值为基准冷阻
+          </button>
+          <button class="btn" id="btnCopySettleReport" onclick="copyCleaningReport()">
+            复制报告
+          </button>
+          <button class="btn" id="btnDismissSettle" onclick="dismissCleaningSettleCard()">
+            关闭
+          </button>
+        </div>
+      </div>
+
+      <div class="settle-metrics-grid">
+        <div class="settle-metric-col">
+          <span class="settle-metric-lbl">清洁前冷阻 (Rpre)</span>
+          <span class="settle-metric-val" id="txtSettlePreR">0.000 Ω</span>
+        </div>
+        <div class="settle-metric-col">
+          <span class="settle-metric-lbl">恢复后冷阻 (Rpost)</span>
+          <span class="settle-metric-val highlight" id="txtSettlePostR">0.000 Ω</span>
+        </div>
+        <div class="settle-metric-col">
+          <span class="settle-metric-lbl">阻值差值 (ΔR)</span>
+          <span class="settle-metric-val highlight" id="txtSettleDeltaR">-0.0 mΩ</span>
+        </div>
+        <div class="settle-metric-col">
+          <span class="settle-metric-lbl">激发轮次与能耗</span>
+          <span class="settle-metric-val" id="txtSettleCycles">0 轮 (0.0 J)</span>
+        </div>
+      </div>
+
+      <div class="settle-verdict-row">
+        <span style="font-weight: 700; color: var(--apple-text);">评价结论:</span>
+        <span class="settle-verdict-text" id="txtSettleVerdict">积碳消除良好</span>
+      </div>
+    </section>
+
+    <!-- Live Decision Stream Log -->
+    <section class="log-stream-card">
+      <span class="log-tag">[清洁决策流]</span>
+      <span class="log-content" id="txtCleaningLog">
+        就绪。滴加双氧水后，点击「启动清洁」或按空格键开始；默认 15W 脉冲连续除碳，30 秒安全超时。
+      </span>
+      <span class="terminal-toggle" id="btnToggleTerminal" onclick="toggleTerminalDrawer()">
+        查看底层串口报文
+      </span>
+    </section>
+
+    <!-- Collapsible Raw Serial Telemetry Drawer -->
+    <div class="terminal-drawer" id="logTerminalOutput">
+      <div class="term-line">
+        <span class="term-time">[00:00:00]</span>
+        <span class="term-dir-sys">[SYS]</span>
+        <span>DNA Pulse Cleaner 就绪，等待连接或切换至仿真模式。</span>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Floating Toast Notification -->
+  <div class="toast-pill" id="toastNotification">提示信息</div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div>DNA Pulse Cleaner • 专业双氧水 15W 脉冲微爆除碳套件 • MIT License</div>
+    <div class="footer-links">
+      <a href="https://github.com" target="_blank" rel="noopener">GitHub 仓库</a>
+      <a href="README.md" target="_blank">使用手册 & 物理原理</a>
+      <a href="LICENSE" target="_blank">MIT 开源授权</a>
+    </div>
+  </footer>
+
+  <!-- ===================================================================
+       APPLICATION CORE SCRIPT (ZERO BUILD, SELF CONTAINED ES6+)
+       =================================================================== -->
+  <script>
+    // --- State Variables ---
+    let connType = 'serial'; // 'serial' | 'sim'
+    let isConnected = false;
+    let serialPort = null;
+    let serialReader = null;
+    let serialWriter = null;
+    let serialWriteQueue = Promise.resolve();
+    let isPolling = false;
+    let pollingTimer = null;
+
+    // Pulse & Cleaning State Machine
+    let isCleaningRunning = false;
+    let isCleaningSettling = false;
+    let isCleaningOneShotRunning = false;
+    let cleaningAbortRequested = false;
+    let cleaningCycleCount = 0;
+    let cleaningTotalEnergyJ = 0.0;
+    let cleaningStartTime = 0;
+    let cleaningPreColdR = 0.0;
+    let cleaningPostColdR = 0.0;
+    let lastColdOhms = 0.380; // Baseline cold ohms
+
+    // Real-time Telemetry
+    const liveTelemetry = {
+      power: 0.0,
+      voltage: 0.0,
+      ohms: 0.380,
+      temp: 72.0,      // °F
+      boardTemp: 28.0, // °C
+      current: 0.0
+    };
+
+    // Simulated Device State
+    const simState = {
+      coldOhms: 0.420,       // Starts dirty (+40mΩ carbon layer)
+      targetCleanOhms: 0.385, // Ideal clean resistance
+      boardTempC: 28.0,
+      powerSetpoint: 15.0,
+      isFiring: false,
+      pulseTick: 0
+    };
+
+    // Waveform Oscilloscope History (Ring buffer)
+    const MAX_WAVEFORM_POINTS = 300;
+    const waveformHistory = {
+      time: [],
+      power: [],
+      voltage: [],
+      ohms: [],
+      temp: []
+    };
+
+    // Helper: Sleep
+    function sleepMs(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    // --- Toast Notifications ---
+    let toastTimeout = null;
+    function showToast(msg, durationMs = 2800) {
+      const el = document.getElementById('toastNotification');
+      if (!el) return;
+      el.innerText = msg;
+      el.classList.add('visible');
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        el.classList.remove('visible');
+      }, durationMs);
+    }
+
+    // --- Decision Stream & Terminal Logger ---
+    function logCleaningDecision(msg) {
+      const el = document.getElementById('txtCleaningLog');
+      if (el) el.innerText = msg;
+      logTerminal('FSM', msg);
+    }
+
+    function logTerminal(dir, text) {
+      const container = document.getElementById('logTerminalOutput');
+      if (!container) return;
+      const now = new Date();
+      const timeStr = `[${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}]`;
+      
+      const line = document.createElement('div');
+      line.className = 'term-line';
+      
+      let dirClass = 'term-dir-sys';
+      if (dir === 'TX') dirClass = 'term-dir-tx';
+      else if (dir === 'RX') dirClass = 'term-dir-rx';
+      
+      line.innerHTML = `<span class="term-time">${timeStr}</span><span class="${dirClass}">[${dir}]</span><span>${escapeHtml(text)}</span>`;
+      container.appendChild(line);
+      
+      // Keep terminal buffer bounded
+      if (container.children.length > 100) {
+        container.removeChild(container.firstChild);
+      }
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function toggleTerminalDrawer() {
+      const drawer = document.getElementById('logTerminalOutput');
+      const btn = document.getElementById('btnToggleTerminal');
+      if (!drawer) return;
+      if (drawer.style.display === 'block') {
+        drawer.style.display = 'none';
+        if (btn) btn.innerText = '查看底层串口报文';
+      } else {
+        drawer.style.display = 'block';
+        if (btn) btn.innerText = '收起底层串口报文';
+      }
+    }
+
+    // --- Theme Switcher ---
+    function toggleThemeMode() {
+      const body = document.body;
+      const currentTheme = body.getAttribute('data-theme') || 'dark';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      body.setAttribute('data-theme', newTheme);
+      showToast(`已切换至${newTheme === 'dark' ? '暗色' : '亮色'}主题`);
+      redrawOscilloscope();
+    }
+
+    // --- Connection Mode Switcher ---
+    function switchConnectionMode(mode) {
+      if (isCleaningRunning || isCleaningSettling || isCleaningOneShotRunning) {
+        showToast('清洁运行中，禁止切换模式');
+        return;
+      }
+      if (isConnected) {
+        disconnectDevice();
+      }
+      connType = mode;
+      const btnHw = document.getElementById('btnModeHardware');
+      const btnSim = document.getElementById('btnModeSimulation');
+      if (btnHw && btnSim) {
+        if (mode === 'serial') {
+          btnHw.classList.add('active');
+          btnSim.classList.remove('active');
+          showToast('已切换至 USB 硬件直连模式');
+        } else {
+          btnHw.classList.remove('active');
+          btnSim.classList.add('active');
+          showToast('已切换至 虚拟演示模式');
+          // Auto connect virtual demo
+          startSimulationMode();
+        }
+      }
+    }
+
+    // --- Device Connection Handler ---
+    async function toggleDeviceConnection() {
+      if (isConnected) {
+        disconnectDevice();
+      } else {
+        if (connType === 'serial') {
+          await connectHardwareSerial();
+        } else {
+          startSimulationMode();
+        }
+      }
+    }
+
+    async function connectHardwareSerial() {
+      if (!('serial' in navigator)) {
+        showToast('当前浏览器不支持 Web Serial API，请使用 Chrome/Edge 或切换至虚拟演示模式');
+        switchConnectionMode('sim');
+        return;
+      }
+
+      try {
+        logCleaningDecision('[USB 连接] 正在请求打开 Evolv DNA CDC ACM 串口...');
+        // Evolv USB CDC Vendor ID 0x268B
+        serialPort = await navigator.serial.requestPort({
+          filters: [
+            { usbVendorId: 0x268b }, // Evolv LLC
+            { usbVendorId: 0x0483 }  // STMicroelectronics / generic CDC
+          ]
+        }).catch(err => {
+          // If filtered request was cancelled or unsupported, fallback to open port chooser
+          return navigator.serial.requestPort();
+        });
+
+        if (!serialPort) return;
+
+        await serialPort.open({
+          baudRate: 115200,
+          dataBits: 8,
+          stopBits: 1,
+          parity: 'none',
+          flowControl: 'none'
+        });
+
+        const textDecoder = new TextDecoderStream();
+        serialPort.readable.pipeTo(textDecoder.writable).catch(() => {});
+        serialReader = textDecoder.readable.getReader();
+
+        const textEncoder = new TextEncoderStream();
+        textEncoder.readable.pipeTo(serialPort.writable).catch(() => {});
+        serialWriter = textEncoder.writable.getWriter();
+
+        isConnected = true;
+        setConnectionUI(true, 'USB 已直连 (115200)');
+        logCleaningDecision('[USB 直连成功] Evolv DNA 芯片通信正常，CDC ACM 115200 8-N-1 就绪');
+        showToast('已成功连接 Evolv DNA 主板');
+
+        // Start reading loop and telemetry polling
+        readSerialLoop();
+        startTelemetryPolling();
+
+        // Initial measurement
+        sendSerialCmd('R=GET');
+        sendSerialCmd('T=GET BOARD');
+      } catch (e) {
+        console.error('Serial connection failed:', e);
+        logCleaningDecision(`[USB 连接失败] ${e.message}`);
+        showToast(`连接失败: ${e.message}`);
+        disconnectDevice();
+      }
+    }
+
+    function startSimulationMode() {
+      isConnected = true;
+      connType = 'sim';
+      setConnectionUI(true, '虚拟仿真运行中');
+      logCleaningDecision('[虚拟仿真模式] 已启动高精热力学微爆仿真机，随时可试火与测试');
+      showToast('已进入虚拟仿真演示模式');
+      startTelemetryPolling();
+      sendSerialCmd('R=GET');
+    }
+
+    function disconnectDevice() {
+      if (isCleaningRunning) {
+        togglePeriodicCleaning(); // stop cleaning safely
+      }
+
+      isConnected = false;
+      if (pollingTimer) {
+        clearInterval(pollingTimer);
+        pollingTimer = null;
+      }
+
+      if (serialReader) {
+        try { serialReader.cancel(); serialReader.releaseLock(); } catch (e) {}
+        serialReader = null;
+      }
+      if (serialWriter) {
+        try { serialWriter.close(); serialWriter.releaseLock(); } catch (e) {}
+        serialWriter = null;
+      }
+      if (serialPort) {
+        try { serialPort.close(); } catch (e) {}
+        serialPort = null;
+      }
+
+      setConnectionUI(false, '未连接');
+      logCleaningDecision('[已断开连接] 设备通信已关闭');
+      showToast('设备已断开连接');
+      updateCleaningUI();
+    }
+
+    function setConnectionUI(connected, text) {
+      const dot = document.getElementById('connectionStatusDot');
+      const txt = document.getElementById('connectionStatusText');
+      const btn = document.getElementById('btnConnectDevice');
+      if (dot) {
+        dot.className = 'status-dot' + (connected ? ' connected' : '');
+      }
+      if (txt) txt.innerText = text;
+      if (btn) {
+        btn.innerText = connected ? '断开连接' : '连接 DNA 设备';
+        if (connected) {
+          btn.classList.remove('btn-primary');
+        } else {
+          btn.classList.add('btn-primary');
+        }
+      }
+    }
+
+    // --- Web Serial Reader Loop ---
+    async function readSerialLoop() {
+      let buffer = '';
+      try {
+        while (isConnected && serialReader) {
+          const { value, done } = await serialReader.read();
+          if (done) break;
+          buffer += value;
+          const lines = buffer.split(/\r?\n/);
+          buffer = lines.pop();
+          for (const line of lines) {
+            if (line.trim()) handleDeviceResponse(line.trim());
+          }
+        }
+      } catch (e) {
+        console.warn('Serial read loop closed:', e);
+      }
+    }
+
+    // --- Command Sender ---
+    function sendSerialCmd(cmd, isUrgent = false) {
+      if (!isConnected) return;
+      logTerminal('TX', cmd);
+
+      if (connType === 'serial') {
+        if (serialWriter) {
+          serialWriteQueue = serialWriteQueue.then(async () => {
+            try {
+              await serialWriter.write(cmd + '\r\n');
+            } catch (e) {
+              logTerminal('SYS', '串口发送错误: ' + e.message);
+            }
+          });
+        }
+      } else if (connType === 'sim') {
+        simulateDeviceResponse(cmd);
+      }
+    }
+
+    // --- Parser for Evolv DNA Serial Responses ---
+    function handleDeviceResponse(line) {
+      logTerminal('RX', line);
+      const parts = line.split('=');
+      if (parts.length < 2) return;
+      const key = parts[0].trim().toUpperCase();
+      const val = parts.slice(1).join('=').trim();
+
+      if (key === 'P') {
+        const p = parseFloat(val);
+        if (!isNaN(p)) liveTelemetry.power = p;
+      } else if (key === 'T') {
+        const t = parseFloat(val);
+        if (!isNaN(t)) liveTelemetry.temp = t;
+      } else if (key === 'R') {
+        const r = parseFloat(val);
+        if (!isNaN(r) && r > 0) {
+          liveTelemetry.ohms = r;
+          if (!isCleaningRunning && !isCleaningOneShotRunning) {
+            lastColdOhms = r;
+          }
+        }
+      } else if (key === 'B' || key === 'U') {
+        const v = parseFloat(val);
+        if (!isNaN(v)) liveTelemetry.voltage = v;
+      } else if (key === 'BOARD') {
+        const b = parseFloat(val);
+        if (!isNaN(b)) liveTelemetry.boardTemp = b;
+      }
+
+      updateCleaningUI();
+    }
+
+    // --- Virtual Device Simulation Physics Engine ---
+    function simulateDeviceResponse(cmd) {
+      setTimeout(() => {
+        if (!isConnected) return;
+
+        if (cmd.startsWith('P=')) {
+          const m = cmd.match(/^P\s*=\s*([0-9\.]+)/i);
+          if (m) simState.powerSetpoint = parseFloat(m[1]);
+          handleDeviceResponse(cmd);
+        } else if (cmd.startsWith('F=')) {
+          if (cmd === 'F=OFF') {
+            simState.isFiring = false;
+            liveTelemetry.power = 0.0;
+            liveTelemetry.ohms = simState.coldOhms;
+            handleDeviceResponse('F=OFF');
+          } else {
+            simState.isFiring = true;
+            simState.pulseTick++;
+            liveTelemetry.power = simState.powerSetpoint;
+            liveTelemetry.temp = 540 + Math.random() * 20;
+
+            // Physical cleaning kinetics: As 15W pulses vaporize droplets, carbon layer decomposes
+            if (simState.coldOhms > simState.targetCleanOhms) {
+              const purifyDelta = (simState.pulseTick % 3 === 0) ? 0.006 : 0.003;
+              simState.coldOhms = Math.max(simState.targetCleanOhms, simState.coldOhms - purifyDelta);
+            }
+
+            // Mild board temperature rise
+            simState.boardTempC = Math.min(42.0, simState.boardTempC + 0.15);
+            liveTelemetry.boardTemp = Math.round(simState.boardTempC * 10) / 10;
+
+            // Live hot resistance has TCR curve (e.g. Ni80 ~ 1.065x cold R)
+            liveTelemetry.ohms = Math.round(simState.coldOhms * 1.062 * 1000) / 1000;
+            handleDeviceResponse(cmd);
+          }
+        } else if (cmd === 'R=GET LIVE') {
+          const rLive = simState.isFiring ? (simState.coldOhms * 1.062) : simState.coldOhms;
+          handleDeviceResponse(`R=${rLive.toFixed(3)}`);
+        } else if (cmd === 'R=GET') {
+          handleDeviceResponse(`R=${simState.coldOhms.toFixed(3)}`);
+        } else if (cmd === 'B=GET') {
+          handleDeviceResponse('B=4.14V');
+        } else if (cmd === 'T=GET BOARD') {
+          handleDeviceResponse(`BOARD=${simState.boardTempC.toFixed(1)}`);
+        } else {
+          handleDeviceResponse(cmd.split('=')[0] + '=OK');
+        }
+      }, 12);
+    }
+
+    // --- Telemetry Polling (Background at ~20Hz) ---
+    function startTelemetryPolling() {
+      if (pollingTimer) clearInterval(pollingTimer);
+      let tick = 0;
+      pollingTimer = setInterval(() => {
+        if (!isConnected) return;
+        tick++;
+
+        // Send polling queries during idle
+        if (!isCleaningRunning && !isCleaningOneShotRunning) {
+          if (tick % 10 === 0) {
+            sendSerialCmd('R=GET');
+            sendSerialCmd('T=GET BOARD');
+          }
+        }
+
+        // Compute simulated / measured electrical voltage V = sqrt(P * R)
+        const curPwr = liveTelemetry.power;
+        const curOhms = Math.max(0.01, liveTelemetry.ohms);
+        liveTelemetry.voltage = curPwr > 0 ? Math.sqrt(curPwr * curOhms) : 0.0;
+
+        // Record waveform data point
+        const nowMs = Date.now();
+        waveformHistory.time.push(nowMs);
+        waveformHistory.power.push(liveTelemetry.power);
+        waveformHistory.voltage.push(liveTelemetry.voltage);
+        waveformHistory.ohms.push(liveTelemetry.ohms);
+        waveformHistory.temp.push(liveTelemetry.boardTemp);
+
+        while (waveformHistory.time.length > MAX_WAVEFORM_POINTS) {
+          waveformHistory.time.shift();
+          waveformHistory.power.shift();
+          waveformHistory.voltage.shift();
+          waveformHistory.ohms.shift();
+          waveformHistory.temp.shift();
+        }
+
+        const lblBuf = document.getElementById('lblWaveformBuffer');
+        if (lblBuf) lblBuf.innerText = `缓存: ${waveformHistory.power.length} 采样点`;
+
+      }, 50);
+    }
+
+    // --- Cleaning FSM Badge Updater ---
+    function updateCleaningFsmBadge(text, color, bgColor) {
+      const badge = document.getElementById('cleaningFsmBadge');
+      if (!badge) return;
+      badge.innerText = text;
+      if (color) badge.style.color = color;
+      if (bgColor) badge.style.backgroundColor = bgColor;
+    }
+
+    // --- Cleaning UI Updater ---
+    function updateCleaningUI() {
+      const inpPwr = document.getElementById('inpCleaningPower');
+      const power = inpPwr ? parseFloat(inpPwr.value) || 15.0 : 15.0;
+
+      // Tile 1: Pre-cold R vs Live R
+      const elPreR = document.getElementById('txtCleaningPreRcold');
+      const elLiveR = document.getElementById('txtCleaningLiveRcold');
+      const elLiveDeltaR = document.getElementById('txtCleaningLiveDeltaR');
+
+      const preR = (cleaningPreColdR > 0) ? cleaningPreColdR : lastColdOhms;
+      const liveR = (liveTelemetry.ohms > 0) ? liveTelemetry.ohms : preR;
+      const liveDelta = liveR - preR;
+
+      if (elPreR) elPreR.innerText = preR.toFixed(3);
+      if (elLiveR) elLiveR.innerText = `${liveR.toFixed(3)}Ω`;
+      if (elLiveDeltaR) {
+        const sign = liveDelta >= 0 ? '+' : '';
+        elLiveDeltaR.innerText = `ΔR: ${sign}${(liveDelta * 1000).toFixed(1)}mΩ`;
+        if (liveDelta < -0.003) {
+          elLiveDeltaR.style.color = 'var(--apple-blue)';
+        } else if (liveDelta > 0.02) {
+          elLiveDeltaR.style.color = 'var(--apple-orange)';
+        } else {
+          elLiveDeltaR.style.color = 'var(--apple-text-muted)';
+        }
+      }
+
+      // Tile 2: Output Power & Voltage
+      const elPwr = document.getElementById('txtCleaningPower');
+      const elPwrRange = document.getElementById('txtCleaningPowerRange');
+      const elVolt = document.getElementById('txtCleaningVoltage');
+
+      const activePwr = (isCleaningRunning || isCleaningOneShotRunning) ? liveTelemetry.power : 0.0;
+      const activeVolt = activePwr > 0 ? Math.sqrt(activePwr * liveR) : 0.0;
+
+      if (elPwr) elPwr.innerText = (isCleaningRunning || isCleaningOneShotRunning) ? activePwr.toFixed(1) : power.toFixed(1);
+      if (elPwrRange) elPwrRange.innerText = `${power.toFixed(1)}W 设定`;
+      if (elVolt) elVolt.innerText = activeVolt.toFixed(2);
+
+      // Tile 4: Cycle count & Energy
+      const elCycles = document.getElementById('txtCleaningCycleCount');
+      const elEnergy = document.getElementById('txtCleaningTotalEnergy');
+      if (elCycles) elCycles.innerText = String(cleaningCycleCount);
+      if (elEnergy) elEnergy.innerText = `${cleaningTotalEnergyJ.toFixed(1)} J 累计吸热`;
+
+      // Tile 5: Temperature
+      const elCoilT = document.getElementById('txtCleaningTempCoil');
+      const elBoardT = document.getElementById('txtCleaningTempBoard');
+      const elTempStatus = document.getElementById('txtCleaningTempStatus');
+
+      if (elCoilT) elCoilT.innerText = (isCleaningRunning || isCleaningOneShotRunning) ? Math.round(liveTelemetry.temp) : '--';
+      if (elBoardT) elBoardT.innerText = String(Math.round(liveTelemetry.boardTemp));
+
+      if (elTempStatus) {
+        const boardC = liveTelemetry.boardTemp;
+        if (boardC >= 60 || liveTelemetry.temp >= 550) {
+          elTempStatus.innerText = '过热告警';
+          elTempStatus.style.color = 'var(--apple-red)';
+        } else if (boardC >= 45 || liveTelemetry.temp >= 380) {
+          elTempStatus.innerText = '温升监视';
+          elTempStatus.style.color = 'var(--apple-orange)';
+        } else {
+          elTempStatus.innerText = '常温安全';
+          elTempStatus.style.color = 'var(--apple-green)';
+        }
+      }
+
+      // Idle Countdown text
+      if (!isCleaningRunning && !isCleaningSettling && !isCleaningOneShotRunning) {
+        const selTimeout = document.getElementById('selCleaningTimeout');
+        const timeoutSec = selTimeout ? parseInt(selTimeout.value) : 30;
+        const elCountdown = document.getElementById('txtCleaningCountdown');
+        if (elCountdown && (elCountdown.innerText.startsWith('待启动') || elCountdown.innerText === '')) {
+          elCountdown.innerText = timeoutSec > 0 ? `待启动 (${timeoutSec}s 安全超时)` : '待启动 (持续模式)';
+        }
+      }
+    }
+
+    // --- Circular Progress & Countdown Timer ---
+    function updateCleaningTimerUI(startTime, timeoutSec) {
+      const elapsedSec = (Date.now() - startTime) / 1000.0;
+      const ring = document.getElementById('circleCleaningRing');
+      const elCountdown = document.getElementById('txtCleaningCountdown');
+      const circumference = 94.25; // 2 * PI * 15
+
+      if (timeoutSec > 0) {
+        const remaining = Math.max(0, timeoutSec - elapsedSec);
+        if (elCountdown) elCountdown.innerText = `运行中 ${elapsedSec.toFixed(1)}s / 剩余 ${remaining.toFixed(1)}s`;
+        if (ring) {
+          const ratio = Math.min(1.0, elapsedSec / timeoutSec);
+          ring.style.strokeDashoffset = String(circumference * (1 - ratio));
+        }
+      } else {
+        if (elCountdown) elCountdown.innerText = `已运行 ${elapsedSec.toFixed(1)}s (持续模式)`;
+        if (ring) ring.style.strokeDashoffset = '0';
+      }
+    }
+
+    // --- Core Pulse Execution Function ---
+    async function executeCleaningPulse(power, durationMs, isLoop = false, loopStartTime = 0, timeoutSec = 0) {
+      sendSerialCmd(`P=${power.toFixed(1)}W`);
+      await sleepMs(15);
+
+      const fireSec = Math.max(0.08, durationMs / 1000.0);
+      sendSerialCmd(`F=${fireSec.toFixed(2)}S`);
+
+      const pulseStart = Date.now();
+      let completedOk = true;
+
+      while (Date.now() - pulseStart < durationMs) {
+        if (cleaningAbortRequested || !isConnected || (isLoop && !isCleaningRunning)) {
+          completedOk = false;
+          break;
+        }
+
+        if (isLoop && timeoutSec > 0 && loopStartTime > 0) {
+          const totalElapsed = (Date.now() - loopStartTime) / 1000.0;
+          if (totalElapsed >= timeoutSec) {
+            completedOk = false;
+            break;
+          }
+          updateCleaningTimerUI(loopStartTime, timeoutSec);
+        }
+
+        updateCleaningUI();
+        await sleepMs(20);
+      }
+
+      sendSerialCmd('F=OFF', true);
+      liveTelemetry.power = 0.0;
+      await sleepMs(15);
+      return completedOk;
+    }
+
+    // --- One-Shot Test Trigger ---
+    async function triggerCleaningOneShot() {
+      if (!isConnected) {
+        showToast('请先连接 DNA 设备 (USB 直连或虚拟仿真)');
+        return;
+      }
+      if (isCleaningRunning) {
+        showToast('清洁正在运行中，无需单发测试');
+        return;
+      }
+      if (isCleaningSettling) {
+        showToast('正在回温结算中，请稍候...');
+        return;
+      }
+      if (isCleaningOneShotRunning) {
+        showToast('单次测试正在激发中，请稍候');
+        return;
+      }
+
+      isCleaningOneShotRunning = true;
+      cleaningAbortRequested = false;
+
+      const inpPwr = document.getElementById('inpCleaningPower');
+      const inpPulse = document.getElementById('inpCleaningPulseMs');
+      const power = inpPwr ? parseFloat(inpPwr.value) || 15.0 : 15.0;
+      const pulseMs = inpPulse ? parseInt(inpPulse.value) || 600 : 600;
+
+      try {
+        sendSerialCmd('R=GET');
+        await sleepMs(120);
+        cleaningPreColdR = liveTelemetry.ohms > 0 ? liveTelemetry.ohms : lastColdOhms;
+
+        updateCleaningFsmBadge('单发脉冲中', 'var(--apple-blue)', 'var(--apple-blue-bg)');
+        logCleaningDecision(`[单发测试] 激发 ${power.toFixed(1)}W / ${pulseMs}ms 单次测试脉冲，观察表面汽化微爆...`);
+
+        const ok = await executeCleaningPulse(power, pulseMs, false);
+
+        if (ok && !cleaningAbortRequested) {
+          await sleepMs(250);
+          sendSerialCmd('R=GET');
+          await sleepMs(120);
+          cleaningPostColdR = liveTelemetry.ohms > 0 ? liveTelemetry.ohms : cleaningPreColdR;
+          const deltaR = cleaningPostColdR - cleaningPreColdR;
+
+          updateCleaningUI();
+          updateCleaningFsmBadge('待机就绪', 'var(--apple-text-secondary)', 'var(--apple-gray-btn)');
+          logCleaningDecision(`[单发完成] 当前阻值: ${cleaningPostColdR.toFixed(3)}Ω (${deltaR >= 0 ? '+' : ''}${(deltaR * 1000).toFixed(1)}mΩ)`);
+        } else {
+          updateCleaningFsmBadge('待机就绪', 'var(--apple-text-secondary)', 'var(--apple-gray-btn)');
+          logCleaningDecision('[单发中断] 单次测试脉冲已中止');
+        }
+      } finally {
+        isCleaningOneShotRunning = false;
+        updateCleaningUI();
+      }
+    }
+
+    // --- Main Periodic Cleaning Loop ---
+    function togglePeriodicCleaning() {
+      if (!isConnected) {
+        showToast('请先连接 DNA 设备 (USB 直连或虚拟仿真)');
+        return;
+      }
+      if (isCleaningSettling) {
+        showToast('正在回温结算中，请稍候...');
+        return;
+      }
+      if (isCleaningOneShotRunning) {
+        showToast('单次测试正在运行中，请稍候');
+        return;
+      }
+
+      if (isCleaningRunning) {
+        // Stop cleaning
+        cleaningAbortRequested = true;
+        isCleaningRunning = false;
+        const btnToggle = document.getElementById('btnToggleCleaning');
+        if (btnToggle) {
+          btnToggle.innerText = '启动清洁 (空格)';
+          btnToggle.classList.remove('btn-danger');
+          btnToggle.classList.add('btn-primary');
+        }
+        updateCleaningFsmBadge('清洁已停止', 'var(--apple-text-secondary)', 'var(--apple-gray-btn)');
+        logCleaningDecision('[手动停止] 用户主动停止清洁，进入沉淀回温阶段...');
+        showToast('清洁已手动停止');
+      } else {
+        // Start cleaning
+        isCleaningRunning = true;
+        cleaningAbortRequested = false;
+        runPeriodicCleaningLoop();
+      }
+    }
+
+    async function runPeriodicCleaningLoop() {
+      if (!isConnected || isCleaningSettling) return;
+
+      isCleaningRunning = true;
+      cleaningAbortRequested = false;
+
+      const btnToggle = document.getElementById('btnToggleCleaning');
+      if (btnToggle) {
+        btnToggle.innerText = '停止清洁 (空格)';
+        btnToggle.classList.remove('btn-primary');
+        btnToggle.classList.add('btn-danger');
+      }
+
+      const settleCard = document.getElementById('cardCleaningSettle');
+      if (settleCard) settleCard.style.display = 'none';
+
+      const selTimeout = document.getElementById('selCleaningTimeout');
+      const parsedTimeout = selTimeout ? parseInt(selTimeout.value) : 30;
+      const timeoutSec = !isNaN(parsedTimeout) ? parsedTimeout : 30;
+
+      // Initial baseline measurement
+      sendSerialCmd('R=GET');
+      await sleepMs(150);
+      cleaningPreColdR = liveTelemetry.ohms > 0 ? liveTelemetry.ohms : lastColdOhms;
+      cleaningCycleCount = 0;
+      cleaningTotalEnergyJ = 0.0;
+      cleaningStartTime = Date.now();
+
+      updateCleaningUI();
+      updateCleaningTimerUI(cleaningStartTime, timeoutSec);
+      updateCleaningFsmBadge('清洁运行中', 'var(--apple-blue)', 'var(--apple-blue-bg)');
+      logCleaningDecision(`[清洁启动] 启动 15W H₂O₂ 连续微爆除碳，安全超时: ${timeoutSec > 0 ? timeoutSec + 's' : '持续模式'}`);
+
+      const elPhaseLabel = document.getElementById('txtCleaningPhaseLabel');
+      const ring = document.getElementById('circleCleaningRing');
+      if (ring) ring.style.strokeDashoffset = '94.25';
+
+      let stoppedByTimeout = false;
+
+      while (isCleaningRunning && !cleaningAbortRequested && isConnected) {
+        const elapsedSec = (Date.now() - cleaningStartTime) / 1000.0;
+        if (timeoutSec > 0 && elapsedSec >= timeoutSec) {
+          stoppedByTimeout = true;
+          logCleaningDecision(`[安全超时保护] 达到 ${timeoutSec} 秒时间上限，自动切断脉冲输出`);
+          showToast(`已达到 ${timeoutSec} 秒安全上限，清洁完成`);
+          break;
+        }
+
+        cleaningCycleCount++;
+        const inpPwr = document.getElementById('inpCleaningPower');
+        const inpPulse = document.getElementById('inpCleaningPulseMs');
+        const inpCooldown = document.getElementById('inpCleaningCooldownMs');
+        const power = inpPwr ? parseFloat(inpPwr.value) || 15.0 : 15.0;
+        const pulseMs = inpPulse ? parseInt(inpPulse.value) || 600 : 600;
+        const cooldownMs = inpCooldown ? parseInt(inpCooldown.value) || 200 : 200;
+
+        // Phase 1: 脉冲汽化微爆
+        updateCleaningFsmBadge(`第 ${cleaningCycleCount} 轮: 脉冲汽化`, 'var(--apple-blue)', 'var(--apple-blue-bg)');
+        if (elPhaseLabel) elPhaseLabel.innerText = '脉冲汽化';
+        logCleaningDecision(`[第 ${cleaningCycleCount} 轮] 激发 ${power.toFixed(1)}W / ${pulseMs}ms 脉冲，剧烈汽化微爆除碳...`);
+
+        const pulseT0 = Date.now();
+        const ok = await executeCleaningPulse(power, pulseMs, true, cleaningStartTime, timeoutSec);
+        const actualPulseMs = Math.min(pulseMs, Date.now() - pulseT0);
+        cleaningTotalEnergyJ += (power * (actualPulseMs / 1000.0));
+        updateCleaningUI();
+        updateCleaningTimerUI(cleaningStartTime, timeoutSec);
+
+        if (!ok || cleaningAbortRequested || !isCleaningRunning || !isConnected) {
+          if (timeoutSec > 0 && (Date.now() - cleaningStartTime) / 1000.0 >= timeoutSec) {
+            stoppedByTimeout = true;
+            logCleaningDecision(`[安全超时保护] 达到 ${timeoutSec} 秒时间上限，自动切断脉冲输出`);
+            showToast(`已达到 ${timeoutSec} 秒安全上限，清洁完成`);
+          }
+          break;
+        }
+
+        // Phase 2: 停顿吸热与微滴渗透
+        updateCleaningFsmBadge(`第 ${cleaningCycleCount} 轮: 停顿吸热`, 'var(--apple-text)', 'var(--apple-gray-btn)');
+        if (elPhaseLabel) elPhaseLabel.innerText = '蒸发停顿';
+
+        const pauseStart = Date.now();
+        while (Date.now() - pauseStart < cooldownMs) {
+          if (cleaningAbortRequested || !isCleaningRunning || !isConnected) break;
+          const curElapsed = (Date.now() - cleaningStartTime) / 1000.0;
+          if (timeoutSec > 0 && curElapsed >= timeoutSec) {
+            stoppedByTimeout = true;
+            logCleaningDecision(`[安全超时保护] 达到 ${timeoutSec} 秒时间上限，自动切断脉冲输出`);
+            showToast(`已达到 ${timeoutSec} 秒安全上限，清洁完成`);
+            break;
+          }
+          updateCleaningTimerUI(cleaningStartTime, timeoutSec);
+          await sleepMs(15);
+        }
+
+        if (stoppedByTimeout || cleaningAbortRequested || !isCleaningRunning || !isConnected) break;
+      }
+
+      // Finish loop
+      isCleaningRunning = false;
+      cleaningAbortRequested = false;
+
+      if (btnToggle) {
+        btnToggle.innerText = '启动清洁 (空格)';
+        btnToggle.classList.remove('btn-danger');
+        btnToggle.classList.add('btn-primary');
+      }
+
+      const ringCircle = document.getElementById('circleCleaningRing');
+      if (ringCircle) ringCircle.style.strokeDashoffset = '0';
+      if (elPhaseLabel) elPhaseLabel.innerText = '已结束';
+
+      const elCountdown = document.getElementById('txtCleaningCountdown');
+      const totalElapsedSec = ((Date.now() - cleaningStartTime) / 1000.0).toFixed(1);
+      if (elCountdown) {
+        if (stoppedByTimeout) {
+          elCountdown.innerText = `已完成 (${timeoutSec}s 超时保护)`;
+        } else {
+          elCountdown.innerText = `已停止 (共运行 ${totalElapsedSec}s)`;
+        }
+      }
+
+      // Trigger settlement card if at least 1 cycle completed
+      if (cleaningCycleCount > 0 && isConnected) {
+        await settleCleaningResults();
+      } else {
+        updateCleaningFsmBadge('待机就绪', 'var(--apple-text-secondary)', 'var(--apple-gray-btn)');
+        updateCleaningUI();
+      }
+    }
+
+    // --- Post-Cleaning Settlement ---
+    async function settleCleaningResults() {
+      if (isCleaningSettling) return;
+      isCleaningSettling = true;
+      try {
+        updateCleaningFsmBadge('等待回温沉淀...', 'var(--apple-blue)', 'var(--apple-blue-bg)');
+        logCleaningDecision('[沉淀回温] 正在等待 1000ms 表面残液完全汽化与线圈降温...');
+
+        const waitStart = Date.now();
+        while (Date.now() - waitStart < 1000) {
+          if (!isConnected) return;
+          await sleepMs(50);
+        }
+
+        if (!isConnected) return;
+
+        sendSerialCmd('R=GET');
+        await sleepMs(180);
+
+        cleaningPostColdR = liveTelemetry.ohms > 0 ? liveTelemetry.ohms : cleaningPreColdR;
+        const deltaR = cleaningPostColdR - cleaningPreColdR;
+        const deltaMohm = (deltaR * 1000).toFixed(1);
+
+        updateCleaningFsmBadge('待机就绪 (已结算)', 'var(--apple-text-secondary)', 'var(--apple-gray-btn)');
+        logCleaningDecision(`[清洁结算] 完成 ${cleaningCycleCount} 轮微爆脉冲，冷阻由 ${cleaningPreColdR.toFixed(3)}Ω 变为 ${cleaningPostColdR.toFixed(3)}Ω (${deltaR >= 0 ? '+' : ''}${deltaMohm}mΩ)`);
+
+        const settleCard = document.getElementById('cardCleaningSettle');
+        if (settleCard) settleCard.style.display = 'block';
+
+        const elPre = document.getElementById('txtSettlePreR');
+        const elPost = document.getElementById('txtSettlePostR');
+        const elDelta = document.getElementById('txtSettleDeltaR');
+        const elCycles = document.getElementById('txtSettleCycles');
+        const elVerdict = document.getElementById('txtSettleVerdict');
+
+        if (elPre) elPre.innerText = `${cleaningPreColdR.toFixed(3)} Ω`;
+        if (elPost) elPost.innerText = `${cleaningPostColdR.toFixed(3)} Ω`;
+        if (elDelta) {
+          elDelta.innerText = `${deltaR >= 0 ? '+' : ''}${deltaMohm} mΩ`;
+          elDelta.style.color = deltaR < 0 ? 'var(--apple-blue)' : (deltaR === 0 ? 'var(--apple-text-secondary)' : 'var(--apple-orange)');
+        }
+        if (elCycles) elCycles.innerText = `${cleaningCycleCount} 轮 (${cleaningTotalEnergyJ.toFixed(1)} J)`;
+        if (elVerdict) {
+          if (deltaR < -0.005) {
+            elVerdict.innerText = '✨ 积碳消除显著！线圈导电杂质与氧化绝缘层已剥离，纯净冷阻恢复。';
+            elVerdict.style.color = 'var(--apple-blue)';
+          } else if (Math.abs(deltaR) <= 0.005) {
+            elVerdict.innerText = '✅ 线圈状态优良！冷阻高度稳定，表面微量杂质已汽化微爆清除。';
+            elVerdict.style.color = 'var(--apple-text)';
+          } else {
+            elVerdict.innerText = '⚠️ 阻值略有上升或尚未完全冷却，建议静置数秒后再次测阻。';
+            elVerdict.style.color = 'var(--apple-orange)';
+          }
+        }
+
+        updateCleaningUI();
+      } finally {
+        isCleaningSettling = false;
+      }
+    }
+
+    function adoptCleaningColdOhms(ohms) {
+      const targetR = typeof ohms === 'number' ? ohms : cleaningPostColdR;
+      if (!targetR || targetR <= 0) {
+        showToast('无效的冷阻值');
+        return;
+      }
+      lastColdOhms = targetR;
+      cleaningPreColdR = targetR;
+      cleaningPostColdR = targetR;
+
+      updateCleaningUI();
+      logCleaningDecision(`[基准采纳] 已采纳清洁后冷阻 ${targetR.toFixed(3)}Ω 作为基准`);
+      showToast(`已采纳基准冷阻: ${targetR.toFixed(3)} Ω`);
+
+      const settleCard = document.getElementById('cardCleaningSettle');
+      if (settleCard) settleCard.style.display = 'none';
+    }
+
+    function dismissCleaningSettleCard() {
+      const settleCard = document.getElementById('cardCleaningSettle');
+      if (settleCard) settleCard.style.display = 'none';
+    }
+
+    function copyCleaningReport() {
+      const pre = cleaningPreColdR.toFixed(3);
+      const post = cleaningPostColdR.toFixed(3);
+      const delta = ((cleaningPostColdR - cleaningPreColdR) * 1000).toFixed(1);
+      const cycles = cleaningCycleCount;
+      const energy = cleaningTotalEnergyJ.toFixed(1);
+      const text = `【DNA Pulse Cleaner 清洁报告】\n清洁前冷阻: ${pre} Ω\n恢复后冷阻: ${post} Ω\n阻值净变化: ${delta >= 0 ? '+' : ''}${delta} mΩ\n激发轮次: ${cycles} 轮 (共 ${energy} J)\n评估结论: 积碳剥离完成`;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast('清洁结算报告已复制到剪贴板');
+        }).catch(() => {
+          showToast('复制失败，请手动记录');
+        });
+      } else {
+        showToast('结算报告: ' + text.replace(/\n/g, ' '));
+      }
+    }
+
+    // --- Oscilloscope Renderer ---
+    function redrawOscilloscope() {
+      const canvas = document.getElementById('monitorCanvas');
+      if (!canvas || !canvas.parentElement) return;
+
+      const rect = canvas.parentElement.getBoundingClientRect();
+      if (rect.width <= 0 || rect.height <= 0) return;
+
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+
+      const w = rect.width;
+      const h = rect.height;
+      const isDark = document.body.getAttribute('data-theme') !== 'light';
+
+      // Background
+      ctx.fillStyle = isDark ? '#0c0c0e' : '#ffffff';
+      ctx.fillRect(0, 0, w, h);
+
+      // Grid Lines
+      ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.06)';
+      ctx.lineWidth = 1;
+      const gridX = 8, gridY = 4;
+      for (let i = 1; i < gridX; i++) {
+        const x = (w / gridX) * i;
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+      for (let i = 1; i < gridY; i++) {
+        const y = (h / gridY) * i;
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+
+      const totalPts = waveformHistory.power.length;
+      if (totalPts < 2) return;
+
+      function plotCurve(dataArr, color, maxVal, minVal = 0, lineW = 1.8) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = lineW;
+        ctx.beginPath();
+        for (let i = 0; i < totalPts; i++) {
+          const val = dataArr[i] !== undefined ? dataArr[i] : minVal;
+          const normY = Math.max(0, Math.min(1, (val - minVal) / (maxVal - minVal)));
+          const x = (i / (totalPts - 1)) * (w - 30) + 15;
+          const y = h - 15 - normY * (h - 30);
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+
+      const chkPwr = document.getElementById('chkCurvePower');
+      const chkVolt = document.getElementById('chkCurveVolt');
+      const chkOhms = document.getElementById('chkCurveOhms');
+      const chkTemp = document.getElementById('chkCurveTemp');
+
+      if (chkPwr && chkPwr.checked) plotCurve(waveformHistory.power, '#0071e3', 30, 0, 2.2);
+      if (chkVolt && chkVolt.checked) plotCurve(waveformHistory.voltage, isDark ? '#64d2ff' : '#007aff', 6.0, 0, 1.6);
+      if (chkOhms && chkOhms.checked) plotCurve(waveformHistory.ohms, isDark ? '#ffffff' : '#1d1d1f', 1.0, 0, 1.8);
+      if (chkTemp && chkTemp.checked) plotCurve(waveformHistory.temp, isDark ? '#86868b' : '#6e6e73', 80, 20, 1.2);
+    }
+
+    function clearWaveformHistory() {
+      waveformHistory.time = [];
+      waveformHistory.power = [];
+      waveformHistory.voltage = [];
+      waveformHistory.ohms = [];
+      waveformHistory.temp = [];
+      redrawOscilloscope();
+      showToast('示波器缓存已清空');
+    }
+
+    // --- Oscilloscope Animation Loop (60FPS) ---
+    function startOscilloscopeLoop() {
+      function frame() {
+        redrawOscilloscope();
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    // --- Keyboard Spacebar Shortcut Handler ---
+    function initKeyboardShortcuts() {
+      window.addEventListener('keydown', (e) => {
+        // Spacebar to trigger start / stop cleaning
+        if (e.code === 'Space' || e.key === ' ') {
+          const activeEl = document.activeElement;
+          const isTyping = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.tagName === 'SELECT');
+          if (!isTyping) {
+            e.preventDefault();
+            togglePeriodicCleaning();
+          }
+        }
+      });
+    }
+
+    // --- Public Getter State APIs (for automated verification & extension) ---
+    function getCleaningRunningState() { return isCleaningRunning; }
+    function getCleaningCycleCount() { return cleaningCycleCount; }
+    function getLastColdOhms() { return lastColdOhms; }
+    function getCleaningPreColdR() { return cleaningPreColdR; }
+    function getCleaningPostColdR() { return cleaningPostColdR; }
+    function getCleaningSettlingState() { return isCleaningSettling; }
+    function getCleaningOneShotState() { return isCleaningOneShotRunning; }
+    function getLiveTelemetry() { return { ...liveTelemetry }; }
+
+    // --- App Initialization ---
+    window.addEventListener('DOMContentLoaded', () => {
+      // Check browser serial capability
+      if (!('serial' in navigator)) {
+        // Automatically default to simulation demo mode on Safari/Firefox/Mobile
+        connType = 'sim';
+        const btnHw = document.getElementById('btnModeHardware');
+        const btnSim = document.getElementById('btnModeSimulation');
+        if (btnHw && btnSim) {
+          btnHw.classList.remove('active');
+          btnSim.classList.add('active');
+        }
+        const pillText = document.getElementById('connectionStatusText');
+        if (pillText) pillText.innerText = '免硬件仿真模式';
+      }
+
+      initKeyboardShortcuts();
+      updateCleaningUI();
+      startOscilloscopeLoop();
+
+      // Window resize listener for canvas
+      window.addEventListener('resize', () => {
+        redrawOscilloscope();
+      });
+    });
+  </script>
+</body>
+</html>
