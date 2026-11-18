@@ -265,7 +265,7 @@ async function runTests() {
   assert.strictEqual(sandbox.getCleaningRunningState(), true, 'Cleaning loop should be running');
 
   const btnToggle = env.mockDocument.getElementById('btnToggleCleaning');
-  assert.strictEqual(btnToggle.innerText, '停止清洁 (空格)', 'Button text should be "停止清洁 (空格)"');
+  assert.strictEqual(btnToggle.innerText, '停止清洁', 'Button text should be "停止清洁"');
   assert.ok(btnToggle.classList.contains('btn-danger'), 'Button should have "btn-danger" class when running');
 
   // Let it execute at least 2 cycles
@@ -278,7 +278,7 @@ async function runTests() {
   // Manually stop cleaning
   sandbox.togglePeriodicCleaning();
   assert.strictEqual(sandbox.getCleaningRunningState(), false, 'Cleaning loop should stop after toggle');
-  assert.strictEqual(btnToggle.innerText, '启动清洁 (空格)', 'Button text should reset to "启动清洁 (空格)"');
+  assert.strictEqual(btnToggle.innerText, '启动清洁', 'Button text should reset to "启动清洁"');
 
   // Wait for 1-second settlement to finish
   console.log('  Waiting for settlement & thermal recovery...');
