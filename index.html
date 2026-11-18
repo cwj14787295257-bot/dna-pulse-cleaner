@@ -281,28 +281,8 @@
         color: var(--apple-text-muted);
         letter-spacing: 1px;
       }
-      .segmented-control {
-        display: flex;
-        padding: 4px;
-        gap: 4px;
-        background: var(--apple-card-secondary);
-        border-radius: 12px;
-        margin: 24px 0 26px;
-      }
-      .segmented-btn {
-        flex: 1;
-        min-height: 38px;
-        border-radius: 9px;
-        background: transparent;
-        color: var(--apple-text-secondary);
-        font-size: 12px;
-      }
-      .segmented-btn.active {
-        background: var(--apple-surface);
-        color: var(--apple-text);
-        box-shadow: 0 2px 5px #0000000d;
-      }
       .parameter-list {
+        margin-top: 24px;
         display: grid;
         gap: 20px;
       }
@@ -734,77 +714,6 @@
           grid-template-columns: repeat(4, minmax(0, 1fr));
           gap: 16px;
         }
-        .segmented-control {
-          max-width: 300px;
-          margin: 20px 0;
-        }
-        .console-actions {
-          grid-template-columns: 1fr 1fr;
-          margin-top: 22px;
-        }
-        .console-actions .btn-primary,
-        .console-actions .btn-danger {
-          order: 2;
-        }
-        .control-note {
-          margin-top: 12px;
-        }
-        .header-actions {
-          gap: 14px;
-        }
-        .guide-steps {
-          grid-template-columns: 1fr 1fr;
-        }
-      }
-      @media (max-width: 639px) {
-        .header-inner {
-          min-height: 64px;
-          padding: 12px 16px;
-          flex-wrap: wrap;
-          gap: 10px;
-        }
-        .brand-group {
-          font-size: 16px;
-        }
-        .brand-mark {
-          width: 21px;
-        }
-        .header-actions {
-          display: contents;
-        }
-        .appearance {
-          margin-left: auto;
-        }
-        .status-pill {
-          order: 3;
-          flex: 1 0 calc(100% - 145px);
-        }
-        .header-actions > .btn {
-          order: 4;
-        }
-        .main-container {
-          padding: 30px 16px 20px;
-        }
-        h1 {
-          font-size: 30px;
-          letter-spacing: -1px;
-        }
-        .page-intro {
-          margin-bottom: 24px;
-        }
-        .page-intro p {
-          font-size: 12px;
-        }
-        .intro-aside {
-          display: none;
-        }
-        .panel {
-          padding: 22px 20px;
-        }
-        .workspace,
-        .monitor-column {
-          gap: 16px;
-        }
         .parameter-list {
           grid-template-columns: 1fr 1fr;
           gap: 18px 14px;
@@ -953,25 +862,7 @@
             <h2 class="panel-title" id="controlTitle">清洁控制</h2>
             <span class="step-number">01 / CONTROL</span>
           </div>
-          <p class="section-caption">连接设备，或先体验虚拟演示。</p>
-          <div class="segmented-control" role="group" aria-label="连接模式">
-            <button
-              id="btnModeHardware"
-              class="segmented-btn active"
-              aria-pressed="true"
-              onclick="switchConnectionMode('serial')"
-            >
-              USB 硬件直连
-            </button>
-            <button
-              id="btnModeSimulation"
-              class="segmented-btn"
-              aria-pressed="false"
-              onclick="switchConnectionMode('sim')"
-            >
-              虚拟演示
-            </button>
-          </div>
+          <p class="section-caption">通过 USB 连接 DNA 设备后开始清洁。</p>
           <div class="parameter-list">
             <div class="parameter">
               <label for="inpCleaningPower">
@@ -1214,7 +1105,7 @@
       <section class="log-stream-card" aria-label="当前状态">
         <span class="log-indicator" aria-hidden="true"></span>
         <span class="log-content" id="txtCleaningLog" role="status">
-          准备就绪。连接设备或选择虚拟演示，开始一次清洁。
+          准备就绪。请通过 USB 连接 DNA 设备。
         </span>
         <button
           class="terminal-toggle"
@@ -1232,7 +1123,7 @@
         <div class="guide-steps">
           <div class="guide-step-item">
             <span class="guide-step-tag">01　连接与检查</span>
-            通过 USB 连接设备，核对参数与基准阻值。没有设备时可使用虚拟演示。
+            通过 USB 连接设备，核对参数与基准阻值。请使用支持 Web Serial 的桌面浏览器。
           </div>
           <div class="guide-step-item">
             <span class="guide-step-tag">02　准备清洁</span>
@@ -1259,7 +1150,6 @@
     <div class="toast-pill" id="toastNotification" role="status"></div>
     <script>
     // --- State Variables ---
-    let connType = 'serial'; // 'serial' | 'sim'
     let isConnected = false;
     let serialPort = null;
     let serialReader = null;
@@ -1288,16 +1178,6 @@
       temp: 72.0,      // °F
       boardTemp: 28.0, // °C
       current: 0.0
-    };
-
-    // Simulated Device State
-    const simState = {
-      coldOhms: 0.420,       // Starts dirty (+40mΩ carbon layer)
-      targetCleanOhms: 0.385, // Ideal clean resistance
-      boardTempC: 28.0,
-      powerSetpoint: 15.0,
-      isFiring: false,
-      pulseTick: 0
     };
 
     // Waveform Oscilloscope History (Ring buffer)
@@ -1414,52 +1294,18 @@
       }
     }
 
-    // --- Connection Mode Switcher ---
-    function switchConnectionMode(mode) {
-      if (isCleaningRunning || isCleaningSettling || isCleaningOneShotRunning) {
-        showToast('清洁运行中，禁止切换模式');
-        return;
-      }
-      if (isConnected) {
-        disconnectDevice();
-      }
-      connType = mode;
-      document.getElementById('btnModeHardware').setAttribute('aria-pressed', String(mode === 'serial'));
-      document.getElementById('btnModeSimulation').setAttribute('aria-pressed', String(mode === 'sim'));
-      const btnHw = document.getElementById('btnModeHardware');
-      const btnSim = document.getElementById('btnModeSimulation');
-      if (btnHw && btnSim) {
-        if (mode === 'serial') {
-          btnHw.classList.add('active');
-          btnSim.classList.remove('active');
-          showToast('已切换至 USB 硬件直连模式');
-        } else {
-          btnHw.classList.remove('active');
-          btnSim.classList.add('active');
-          showToast('已切换至 虚拟演示模式');
-          // Auto connect virtual demo
-          startSimulationMode();
-        }
-      }
-    }
-
     // --- Device Connection Handler ---
     async function toggleDeviceConnection() {
       if (isConnected) {
         disconnectDevice();
       } else {
-        if (connType === 'serial') {
-          await connectHardwareSerial();
-        } else {
-          startSimulationMode();
-        }
+        await connectHardwareSerial();
       }
     }
 
     async function connectHardwareSerial() {
       if (!('serial' in navigator)) {
-        showToast('当前浏览器不支持 Web Serial API，请使用 Chrome/Edge 或切换至虚拟演示模式');
-        switchConnectionMode('sim');
+        showToast('当前浏览器不支持 USB 串口连接，请使用桌面版 Chrome 或 Edge');
         return;
       }
 
@@ -1518,23 +1364,6 @@
         showToast(`连接失败: ${e.message}`);
         disconnectDevice();
       }
-    }
-
-    function startSimulationMode() {
-      isConnected = true;
-      connType = 'sim';
-      // Reset simulation state for repeatable de-carbonizing kinetics demonstrations
-      simState.coldOhms = 0.420;
-      simState.pulseTick = 0;
-      simState.boardTempC = 28.0;
-      simState.isFiring = false;
-      cleaningPreColdR = 0.420;
-      lastColdOhms = 0.420;
-      setConnectionUI(true, '虚拟仿真运行中');
-      logCleaningDecision('[虚拟仿真模式] 已启动高精热力学微爆仿真机，随时可试火与测试');
-      showToast('已进入虚拟仿真演示模式');
-      startTelemetryPolling();
-      sendSerialCmd('R=GET');
     }
 
     function disconnectDevice() {
@@ -1614,27 +1443,23 @@
       if (!isConnected) return;
       logTerminal('TX', cmd);
 
-      if (connType === 'serial') {
-        if (serialWriter) {
-          const writeOp = async () => {
-            try {
-              if (serialWriter) {
-                await serialWriter.write(cmd + '\r\n');
-              }
-            } catch (e) {
-              logTerminal('SYS', '串口发送错误: ' + e.message);
+      if (serialWriter) {
+        const writeOp = async () => {
+          try {
+            if (serialWriter) {
+              await serialWriter.write(cmd + '\r\n');
             }
-          };
-
-          if (isUrgent) {
-            // High-priority urgent bypass (e.g. F=OFF emergency cutoff) executes at head of queue
-            serialWriteQueue = Promise.resolve().then(writeOp);
-          } else {
-            serialWriteQueue = serialWriteQueue.then(writeOp);
+          } catch (e) {
+            logTerminal('SYS', '串口发送错误: ' + e.message);
           }
+        };
+
+        if (isUrgent) {
+          // High-priority urgent bypass (e.g. F=OFF emergency cutoff) executes at head of queue
+          serialWriteQueue = Promise.resolve().then(writeOp);
+        } else {
+          serialWriteQueue = serialWriteQueue.then(writeOp);
         }
-      } else if (connType === 'sim') {
-        simulateDeviceResponse(cmd);
       }
     }
 
@@ -1683,60 +1508,6 @@
       updateCleaningUI();
     }
 
-    // --- Virtual Device Simulation Physics Engine ---
-    function simulateDeviceResponse(cmd) {
-      setTimeout(() => {
-        if (!isConnected) return;
-
-        if (cmd.startsWith('P=')) {
-          const m = cmd.match(/^P\s*=\s*([0-9\.]+)/i);
-          if (m) simState.powerSetpoint = parseFloat(m[1]);
-          handleDeviceResponse(cmd);
-        } else if (cmd.startsWith('F=')) {
-          if (cmd === 'F=OFF') {
-            simState.isFiring = false;
-            liveTelemetry.power = 0.0;
-            liveTelemetry.ohms = simState.coldOhms;
-            liveTelemetry.temp = 28.0;
-            handleDeviceResponse('F=OFF');
-          } else {
-            simState.isFiring = true;
-            simState.pulseTick++;
-            liveTelemetry.power = simState.powerSetpoint;
-            // Realistic pulse surface coil temperature in °C (~280°C)
-            liveTelemetry.temp = 280 + Math.round(Math.random() * 15);
-
-            // Physical cleaning kinetics: As 15W pulses vaporize droplets, carbon layer decomposes
-            if (simState.coldOhms > simState.targetCleanOhms) {
-              const purifyDelta = (simState.pulseTick % 3 === 0) ? 0.006 : 0.003;
-              simState.coldOhms = Math.max(simState.targetCleanOhms, simState.coldOhms - purifyDelta);
-            }
-
-            // Mild board temperature rise
-            simState.boardTempC = Math.min(42.0, simState.boardTempC + 0.15);
-            liveTelemetry.boardTemp = Math.round(simState.boardTempC * 10) / 10;
-
-            // Live hot resistance has TCR curve (e.g. Ni80 ~ 1.062x cold R)
-            liveTelemetry.ohms = Math.round(simState.coldOhms * 1.062 * 1000) / 1000;
-            handleDeviceResponse(cmd);
-          }
-        } else if (cmd === 'R=GET LIVE') {
-          const rLive = simState.isFiring ? (simState.coldOhms * 1.062) : simState.coldOhms;
-          handleDeviceResponse(`R=${rLive.toFixed(3)}`);
-        } else if (cmd === 'R=GET') {
-          handleDeviceResponse(`R=${simState.coldOhms.toFixed(3)}`);
-        } else if (cmd === 'R=RESAMPLE') {
-          handleDeviceResponse(`R=${simState.coldOhms.toFixed(3)}`);
-        } else if (cmd === 'B=GET') {
-          handleDeviceResponse('B=4.14V');
-        } else if (cmd === 'T=GET BOARD') {
-          handleDeviceResponse(`BOARD=${simState.boardTempC.toFixed(1)}`);
-        } else {
-          handleDeviceResponse(cmd.split('=')[0] + '=OK');
-        }
-      }, 12);
-    }
-
     // --- Telemetry Polling (Background at ~20Hz) ---
     function startTelemetryPolling() {
       if (pollingTimer) clearInterval(pollingTimer);
@@ -1753,7 +1524,7 @@
           }
         }
 
-        // Compute simulated / measured electrical voltage V = sqrt(P * R)
+        // Compute electrical voltage V = sqrt(P * R)
         const curPwr = liveTelemetry.power;
         const curOhms = Math.max(0.01, liveTelemetry.ohms);
         liveTelemetry.voltage = curPwr > 0 ? Math.sqrt(curPwr * curOhms) : 0.0;
@@ -1931,7 +1702,7 @@
     // --- One-Shot Test Trigger ---
     async function triggerCleaningOneShot() {
       if (!isConnected) {
-        showToast('请先连接 DNA 设备 (USB 直连或虚拟仿真)');
+        showToast('请先通过 USB 连接 DNA 设备');
         return;
       }
       if (isCleaningRunning) {
@@ -1988,7 +1759,7 @@
     // --- Main Periodic Cleaning Loop ---
     function togglePeriodicCleaning() {
       if (!isConnected) {
-        showToast('请先连接 DNA 设备 (USB 直连或虚拟仿真)');
+        showToast('请先通过 USB 连接 DNA 设备');
         return;
       }
       if (isCleaningSettling) {
@@ -2225,7 +1996,6 @@
       lastColdOhms = targetR;
       cleaningPreColdR = targetR;
       cleaningPostColdR = targetR;
-      simState.coldOhms = targetR;
 
       if (isConnected) {
         sendSerialCmd('R=RESAMPLE');
@@ -2395,21 +2165,15 @@
     window.addEventListener('DOMContentLoaded', () => {
       // Check browser serial capability
       if (!('serial' in navigator)) {
-        // Automatically default to simulation demo mode on Safari/Firefox/Mobile
-        connType = 'sim';
-        const btnHw = document.getElementById('btnModeHardware');
-        const btnSim = document.getElementById('btnModeSimulation');
-        if (btnHw && btnSim) {
-          btnHw.classList.remove('active');
-          btnSim.classList.add('active');
-        }
-        const pillText = document.getElementById('connectionStatusText');
-        if (pillText) pillText.innerText = '免硬件仿真模式';
+        const message = '当前浏览器不支持 USB 串口连接，请使用桌面版 Chrome 或 Edge';
+        document.getElementById('connectionStatusText').innerText = '浏览器不支持 USB 连接';
+        document.getElementById('txtCleaningLog').innerText = message;
+        document.getElementById('btnConnectDevice').disabled = true;
+        document.getElementById('btnCleaningOneShot').disabled = true;
+        document.getElementById('btnToggleCleaning').disabled = true;
       }
 
       initializeAppearance();
-      document.getElementById('btnModeHardware').setAttribute('aria-pressed', String(connType === 'serial'));
-      document.getElementById('btnModeSimulation').setAttribute('aria-pressed', String(connType === 'sim'));
       initKeyboardShortcuts();
       updateCleaningUI();
       startOscilloscopeLoop();

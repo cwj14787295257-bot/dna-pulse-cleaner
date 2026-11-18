@@ -40,7 +40,7 @@ dna-pulse-cleaner/
 ├── preview.js                 # Zero-dependency local Node.js HTTP server (port 8080)
 ├── verify_syntax.js           # Node.js VM syntax check on inline scripts
 ├── verify_dom_elements.js     # DOM ID and function signature regression test
-├── test_e2e_simulation.js     # 14-phase comprehensive browser sandbox test suite
+├── test_e2e_serial.js     # 14-phase Web Serial mock test suite
 └── .gitignore                 # Standard Git ignore rules
 ```
 
@@ -145,6 +145,8 @@ Strictly adheres to Apple Dark/Light Adaptive Minimalism:
 
 ## 6. Verification & Automated Testing Suite
 
+The production app is USB-only. Unsupported browsers show a compatibility message and keep controls disabled. Device substitutes exist only in the Node.js test suite; these tests do not validate physical hardware.
+
 The repository contains three regression test scripts that run in Node.js:
 
 ### 6.1 Running the Test Suite
@@ -155,16 +157,16 @@ node verify_syntax.js
 # 2. DOM ID & function signature integrity check
 node verify_dom_elements.js
 
-# 3. Full 14-phase E2E sandbox simulation
-node test_e2e_simulation.js
+# 3. Full 14-phase E2E serial-mock tests
+node test_e2e_serial.js
 ```
 
 ### 6.2 Test Coverage Matrix
 | Suite | Target | Asserts | Description |
 |---|---|---|---|
 | `verify_syntax.js` | `index.html` inline script | 0 syntax errors | Uses Node.js `vm.Script` to parse 42KB+ JS payload. |
-| `verify_dom_elements.js` | Element & Function IDs | 50 DOM IDs, 40 Functions | Asserts all control buttons, tiles, inputs, and functions exist. |
-| `test_e2e_simulation.js` | Full Sandbox Workflow | 14 test phases | Validates connection, pulses, settlement card, $\Delta R$ math, boundary clamping, urgent queue bypass, and thermal zones. |
+| `verify_dom_elements.js` | Element & Function IDs | 48 DOM IDs, 37 Functions | Asserts all control buttons, tiles, inputs, and functions exist. |
+| `test_e2e_serial.js` | Full Sandbox Workflow | 14 test phases | Validates connection, pulses, settlement card, $\Delta R$ math, boundary clamping, urgent queue bypass, and thermal zones. |
 
 ---
 

@@ -14,7 +14,7 @@
 
 **项目仓库**：[GitHub](https://github.com/cwj14787295257-bot/dna-pulse-cleaner)
 
-新版控制台支持桌面与手机布局，外观默认跟随系统，也可选择浅色或深色并记住偏好。无硬件时可选择「虚拟演示」。
+新版控制台支持桌面与手机布局，外观默认跟随系统，也可选择浅色或深色并记住偏好。使用时需要通过 USB 连接 DNA 设备。
 
 ## 简体中文 (Chinese)
 
@@ -29,9 +29,6 @@
 - 🔌 **免驱直连 (Zero-Driver Web Serial)**:
   - 浏览器原生驱动，无需安装额外驱动或庞大的桌面套件；
   - 严格支持 Evolv 芯片 CDC ACM 协议，自动识别 USB Vendor ID `0x268B`；
-- ⚡ **无硬件虚拟演示模式 (High-Fidelity Virtual Simulation)**:
-  - 在手机端浏览器或未连接硬件时一键切换；
-  - 内置真实发热丝热力学与双氧水汽化剥离动力学模型，离线环境下也能完整体验清洁全流程；
 - 🎯 **15W 黄金热量微爆控制台**:
   - 脉冲功率 (10.0W~25.0W, 默认 15.0W)
   - 脉冲脉宽 (300ms~1200ms, 默认 600ms)
@@ -63,14 +60,12 @@
 
 ### 4. 浏览器兼容性与环境要求
 
-| 浏览器 | 硬件直连 (Web Serial) | 虚拟演示模式 (Simulation) |
-|---|---|---|
-| **Google Chrome (桌面版 >= 89)** | ✅ 完美支持 | ✅ 完美支持 |
-| **Microsoft Edge (桌面版 >= 89)** | ✅ 完美支持 | ✅ 完美支持 |
-| **Opera (桌面版 >= 75)** | ✅ 完美支持 | ✅ 完美支持 |
-| **Apple Safari (macOS / iOS)** | ❌ (内核未实现 Web Serial) | ✅ 完美支持 (自动启用仿真) |
-| **Mozilla Firefox** | ❌ (内核未实现 Web Serial) | ✅ 完美支持 (自动启用仿真) |
-| **手机移动端浏览器** | ❌ (缺少 USB 串口权限) | ✅ 完美支持 (自动启用仿真) |
+| 浏览器 | USB 硬件连接 |
+|---|---|
+| 桌面版 Chrome / Edge | 需要支持 Web Serial，且在 HTTPS 或 localhost 下运行 |
+| 其他浏览器 | 以浏览器是否提供 Web Serial 为准；不支持时页面提示并禁用操作 |
+
+网站仅提供 USB 硬件模式，需要连接真实设备后才能运行。
 
 > ⚠️ **重要提示**: Web Serial API 是浏览器标准安全接口，**强制要求运行在 HTTPS 安全上下文或 `http://localhost` 本地环境中**。部署到 GitHub Pages 会自动获得合规的免费公网 HTTPS 地址。
 
@@ -103,7 +98,6 @@ Combining millisecond-accurate 15.0W pulse heating kinetics with medical-grade 3
 ### 2. Highlights
 
 - **Native Web Serial Interface**: Zero driver configuration, direct CDC ACM serial terminal.
-- **Hardware-Free Simulation Demo**: Real-time coil thermal thermodynamics and resistance restoration modeling for instant evaluation in any browser.
 - **15W Sweet-Spot Pulse Console**: Micro-adjustable power, pulse width, cooldown window, and 30s auto-cutoff safety protection.
 - **Emergency Spacebar Safety Trigger**: Start or stop firing instantly with the keyboard Space key.
 - **5-Tile Live Telemetry Dashboard**: Benchmark vs live cold resistance ($\Delta R$), firing power/voltage ($V=\sqrt{P \times R}$), circular timer, pulse cycle count, energy ($J$), and board/coil temperatures.
@@ -135,14 +129,14 @@ Combining millisecond-accurate 15.0W pulse heating kinetics with medical-grade 3
 本工程包含完整的端到端自动化测试套件：
 
 - `node verify_syntax.js`: 校验 `index.html` 内联 JavaScript 语法的正确编译（Node.js VM 校验）。
-- `node verify_dom_elements.js`: 校验 50 核心 DOM 节点 ID 与 40 关键函数签名的完整性。
-- `node test_e2e_simulation.js`: 在沙箱中执行 14 项端到端全链路时序与边界测试（连接、单发脉冲、循环微爆、安全超时保护、结算卡片、阻值采纳、空格键防双重触发、暗亮色主题、紧急停机截断、温度单位换算等）。
+- `node verify_dom_elements.js`: 校验 48 核心 DOM 节点 ID 与 37 关键函数签名的完整性。
+- `node test_e2e_serial.js`: 使用测试专用串口替身执行 14 项端到端全链路时序与边界测试（不代表实机验证）（连接、单发脉冲、循环微爆、安全超时保护、结算卡片、阻值采纳、空格键防双重触发、暗亮色主题、紧急停机截断、温度单位换算等）。
 
 执行测试：
 ```bash
 node verify_syntax.js
 node verify_dom_elements.js
-node test_e2e_simulation.js
+node test_e2e_serial.js
 ```
 
 ---

@@ -4,7 +4,7 @@ const assert = require('assert');
 const vm = require('vm');
 
 console.log('====================================================');
-console.log(' RUNNING DNA PULSE CLEANER E2E SIMULATION TEST SUITE');
+console.log(' RUNNING DNA PULSE CLEANER E2E SERIAL TEST SUITE');
 console.log('====================================================\n');
 
 // 1. Build Mock Browser DOM Environment
@@ -149,7 +149,24 @@ function createMockEnvironment() {
   };
 
   let copiedClipboardText = '';
+  const serialCommands = [];
+  const mockPort = {
+    async open(options) {
+      assert.strictEqual(options.baudRate, 115200);
+      let output;
+      this.readable = new ReadableStream({ start(controller) { output = controller; } });
+      this.writable = new WritableStream({ write(bytes) {
+        const cmd = new TextDecoder().decode(bytes).trim();
+        serialCommands.push(cmd);
+        const reply = cmd === 'R=GET' || cmd === 'R=RESAMPLE' ? 'R=0.420' :
+          cmd === 'T=GET BOARD' ? 'BOARD=28.0' : cmd;
+        output.enqueue(new TextEncoder().encode(reply + '\r\n'));
+      } });
+    },
+    async close() {}
+  };
   const mockNavigator = {
+    serial: { requestPort: async () => mockPort },
     clipboard: {
       writeText: async (txt) => {
         copiedClipboardText = txt;
@@ -159,6 +176,7 @@ function createMockEnvironment() {
   };
 
   return {
+    serialCommands,
     elements,
     mockDocument,
     mockWindow,
@@ -204,6 +222,8 @@ async function runTests() {
     clearInterval: clearInterval,
     Date: Date,
     Math: Math,
+    TextEncoderStream,
+    TextDecoderStream,
     Promise: Promise,
     requestAnimationFrame: env.mockWindow.requestAnimationFrame
   };
@@ -226,17 +246,17 @@ async function runTests() {
   console.log('✔ Initial state validated.');
 
   // =========================================================================
-  // TEST 2: Virtual Simulation Mode Connection
+  // TEST 2: USB Serial Connection
   // =========================================================================
-  console.log('\n--- Test 2: Virtual Simulation Mode Connection ---');
-  sandbox.switchConnectionMode('sim');
+  console.log('\n--- Test 2: USB Serial Connection ---');
+  await sandbox.connectHardwareSerial();
   await new Promise(r => setTimeout(r, 60));
 
   const statusText = env.mockDocument.getElementById('connectionStatusText').innerText;
   const statusDot = env.mockDocument.getElementById('connectionStatusDot');
-  assert.ok(statusText.includes('虚拟仿真'), `Status text should indicate virtual simulation, got: "${statusText}"`);
+  assert.ok(statusText.includes('USB 已直连'), `Status text should indicate USB serial connection, got: "${statusText}"`);
   assert.ok(statusDot.classList.contains('connected'), 'Status dot should have "connected" class');
-  console.log(`✔ Virtual simulation connected successfully: "${statusText}"`);
+  console.log(`✔ USB serial connected successfully: "${statusText}"`);
 
   // =========================================================================
   // TEST 3: Single-Shot Test Pulse (triggerCleaningOneShot)
@@ -402,9 +422,9 @@ async function runTests() {
   assert.strictEqual(disconnectedText, '未连接', 'Status should be "未连接"');
   assert.strictEqual(env.mockDocument.getElementById('connectionStatusDot').classList.contains('connected'), false);
 
-  sandbox.startSimulationMode();
+  await sandbox.connectHardwareSerial();
   const reconnectedText = env.mockDocument.getElementById('connectionStatusText').innerText;
-  assert.ok(reconnectedText.includes('虚拟仿真'), 'Should reconnect to simulation');
+  assert.ok(reconnectedText.includes('USB 已直连'), 'Should reconnect through Web Serial');
   console.log('✔ Disconnect and re-connection verified.');
 
   // =========================================================================
@@ -463,15 +483,28 @@ async function runTests() {
   console.log('✔ Hardware echo and current telemetry verified.');
 
   // =========================================================================
-  // TEST 14: Repeatable Simulation Clean-Ohms Progression
+  // TEST 14: Serial-only app and unsupported-browser handling
   // =========================================================================
-  console.log('\n--- Test 14: Repeatable Simulation Progression ---');
-  sandbox.startSimulationMode();
-  assert.strictEqual(sandbox.getLastColdOhms(), 0.420, 'Simulator must reset cold ohms to dirty baseline (0.420Ω)');
-  console.log('✔ Repeatable simulation reset verified.');
+  console.log('\n--- Test 14: Serial-only and Unsupported Browser ---');
+  assert.ok(env.serialCommands.includes('P=15.0W'), 'Power commands should reach the serial writer');
+  assert.ok(env.serialCommands.includes('F=OFF'), 'Stop commands should reach the serial writer');
+  assert.ok(!/simState|simulateDeviceResponse|startSimulationMode|btnModeSimulation/.test(html), 'Production app must not include demo code');
+  sandbox.disconnectDevice();
+  delete env.mockNavigator.serial;
+  env.mockWindow.dispatchEvent({ type: 'DOMContentLoaded' });
+  assert.strictEqual(env.mockDocument.getElementById('btnConnectDevice').disabled, true);
+  assert.strictEqual(env.mockDocument.getElementById('btnCleaningOneShot').disabled, true);
+  assert.strictEqual(env.mockDocument.getElementById('btnToggleCleaning').disabled, true);
+  await sandbox.connectHardwareSerial();
+  assert.ok(env.mockDocument.getElementById('toastNotification').innerText.includes('不支持'));
+  sandbox.triggerCleaningOneShot();
+  sandbox.togglePeriodicCleaning();
+  assert.strictEqual(sandbox.getCleaningRunningState(), false, 'Unsupported browsers must stay disconnected');
+  assert.ok(env.mockDocument.getElementById('connectionStatusText').innerText.includes('不支持'));
+  console.log('✔ Real serial path and unsupported-browser handling verified.');
 
   console.log('\n====================================================');
-  console.log(' ALL 14 E2E SIMULATION TESTS PASSED (100% PASS RATE) ');
+  console.log(' ALL 14 E2E SERIAL TESTS PASSED (100% PASS RATE) ');
   console.log('====================================================\n');
   process.exit(0);
 }
